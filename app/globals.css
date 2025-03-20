@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "ativ-regular";
+  src: url("/fonts/aktiv-reg.ttf");
+}
+
+/* @font-face {
+  font-family: "aktiv-medium";
+  src: url("/fonts/aktiv-medium.woff");
+}
+
+@font-face {
+  font-family: "aktiv-bold";
+  src: url("/fonts/aktiv-bold.woff");
+}
+
+@font-face {
+  font-family: "aktiv-thin";
+  src: url("/fonts/aktiv-thin.woff");
+} */
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-aktiv-regular: var(--font-aktiv);
+  --font-aktiv-medium: var(--font-aktiv-medium);
+  --font-aktiv-bold: var(--font-aktiv-bold);
+  --font-aktiv-thin: var(--font-aktiv-thin);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+li {
+  list-style: none;
+}
+
+.bgg {
+  border-radius: 12px;
+  border: 1px solid #333;
+  background: var(
+    --grad3,
+    linear-gradient(
+      180deg,
+      rgba(12, 12, 12, 0.13) 11.41%,
+      rgba(203, 8, 127, 0.38) 60.63%,
+      #ffd238 100%
+    )
+  );
+}
+
+button {
+  cursor: pointer;
+}
+.rank1 {
+  border-radius: 13px;
+  background: linear-gradient(90deg, #ffd238 0%, #070707 100%);
+  color: black;
+}
+
+.rank2 {
+  border-radius: 13px;
+  background: linear-gradient(90deg, #6e88ec 0%, #070707 100%);
+}
+
+.rank3 {
+  border-radius: 13px;
+  background: linear-gradient(90deg, #6b758b 0%, #070707 100%);
+}
+
+.bgg2 {
+  background: var(
+    --grad3,
+    linear-gradient(
+      180deg,
+      rgba(12, 12, 12, 0.13) 11.41%,
+      rgba(203, 8, 127, 0.38) 60.63%,
+      #ffd238 100%
+    )
+  );
+}
+
+.adminInput {
+  border-radius: 28px;
+  border: 1px solid #333;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  height: 60px;
+  padding: 10px 10px 10px 22px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+}
