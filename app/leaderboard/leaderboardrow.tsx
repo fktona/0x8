@@ -53,9 +53,13 @@ export default function LeaderboardRow({
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-xs">
-            {name.charAt(0)}
-          </div>
+          <Image
+            src={"/profile-placeholder.svg"}
+            alt={"X"}
+            width={20}
+            height={20}
+            className="rounded-full"
+          />
           <span className="text-[16px]  font-medium">{name}</span>
           <Image
             src={"/x.svg"}
