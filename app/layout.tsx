@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import Search from "@/components/search";
 import { aktive, aktivThin, aktiveBold, aktiveMedium } from "@/fonts/font";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,6 +24,7 @@ export default function RootLayout({
         <Navbar />
         <div className="lg:mt-[80px] mt-[27px]" />
         {children}
+        <Footer />
       </body>
     </html>
   );

@@ -72,7 +72,7 @@ function Navbar() {
             <li
               key={index}
               className={cn(
-                "text-[18px] px-4 py-2 rounded-full",
+                "text-[18px] px-4 py-2 rounded-full uppercase",
                 path === route
                   ? "bg-[#6E88EC] text-black"
                   : "hover:bg-[#6E88EC]/40"
