@@ -1,4 +1,5 @@
 "use client";
+import ProfileLink from "@/components/profile-link";
 import Image from "next/image";
 
 interface AccountProps {
@@ -20,13 +21,15 @@ export default function AccountRow({ account, onDelete }: AccountProps) {
         <div className="w-6 text-center font-medium">{account.id}</div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          <Image
-            src={"/profile-placeholder.svg"}
-            alt={"profile"}
-            width={38}
-            height={38}
-            className="rounded-full"
-          />
+          <ProfileLink walletAddress={account.walletAddress}>
+            <Image
+              src={"/profile-placeholder.svg"}
+              alt={"profile"}
+              width={38}
+              height={38}
+              className="rounded-full"
+            />
+          </ProfileLink>
           <span className="font-medium">{account.name}</span>
 
           {account.platforms.includes("x") && (

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import ProfileLink from "@/components/profile-link";
 
 interface TradeProps {
   walletAddress: string;
@@ -15,13 +16,16 @@ export default function TradesList({ walletAddress, coinType }: TradeProps) {
     <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden">
       <div className="flex items-center p-3 border-b border-white/10">
         <div className="flex items-center gap-2">
-          <Image
-            src={"profile-placeholder.svg"}
-            alt={"BNB"}
-            width={30}
-            height={30}
-            className="rounded-full"
-          />
+          <ProfileLink walletAddress={walletAddress}>
+            <Image
+              src={"profile-placeholder.svg"}
+              alt={"BNB"}
+              width={30}
+              height={30}
+              className="rounded-full"
+            />
+          </ProfileLink>
+
           <span className="text-sm">ROBO</span>
           <Image
             src={"/x.svg"}

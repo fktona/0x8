@@ -1,3 +1,4 @@
+import ProfileLink from "@/components/profile-link";
 import Image from "next/image";
 interface LeaderboardRowProps {
   rank: number;
@@ -53,13 +54,15 @@ export default function LeaderboardRow({
         </div>
 
         <div className="flex items-center gap-2">
-          <Image
-            src={"/profile-placeholder.svg"}
-            alt={"X"}
-            width={20}
-            height={20}
-            className="rounded-full"
-          />
+          <ProfileLink walletAddress={walletAddress}>
+            <Image
+              src={"/profile-placeholder.svg"}
+              alt={"X"}
+              width={20}
+              height={20}
+              className="rounded-full"
+            />
+          </ProfileLink>
           <span className="text-[16px]  font-medium">{name}</span>
           <Image
             src={"/x.svg"}

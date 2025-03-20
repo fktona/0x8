@@ -111,7 +111,7 @@ export default function ProfilePage() {
           <div className="w-full inset-0  bgg2 z-0 h-[191px]"></div>
 
           {/* Profile Info */}
-          <div className="w-full flex  flex-col lg:justify-between relative z-20 items-start ">
+          <div className="w-full flex  flex-col lg:flex-row lg:justify-between relative z-20 items-start ">
             <div className="flex items-start gap-4 mb-6">
               <div className="w-[135px] h-[135px] rounded-full flex items-center justify-center ">
                 <Image
@@ -225,9 +225,9 @@ export default function ProfilePage() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow p-4 text-[18px] font-aktiv-regular  grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="flex-grow p-4 text-[18px] font-aktiv-regular  grid grid-cols-1 lg:grid-cols-7 gap-6">
         {/* Top Holdings */}
-        <div className="bg-[#0C0C0C] max-w-[450px] border border-white/10 rounded-lg overflow-hidden">
+        <div className="bg-[#0C0C0C]  border border-white/10 rounded-lg col-span-3 overflow-hidden">
           <div className="flex items-center py-[17.11px] justify-between p-3 border-b border-white/10">
             <h3 className="font-medium">TOP HOLDINGS</h3>
             <span className="text-white/80">{holdings[0].value}</span>
@@ -245,7 +245,7 @@ export default function ProfilePage() {
         </div>
 
         {/* DEFI Trades */}
-        <div className="bg-[#0C0C0C] border font-aktiv-regular text-[16px] border-white/10 rounded-lg overflow-hidden">
+        <div className="bg-[#0C0C0C]  border font-aktiv-regular col-span-4 text-[16px] border-white/10 rounded-lg overflow-hidden">
           <div className="flex items-center w-full gap-4 justify-between p-3 border-b border-white/10">
             <h3 className="font-medium">DEFI TRADES</h3>
 
