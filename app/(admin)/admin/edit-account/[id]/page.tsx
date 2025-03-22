@@ -4,6 +4,7 @@ import { AccountTypes } from "@/app/actions/action";
 
 async function Profile({ params }: { params: { id: string } }) {
   await params;
+
   const id = await params?.id;
   try {
     const response = await fetch(
