@@ -6,22 +6,16 @@ import { useState, useRef, useEffect, useActionState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useFormState, useFormStatus } from "react-dom";
-import { addAccount, type AccountFormState } from "@/app/actions/action";
+import {
+  AccountTypes,
+  EditAccount,
+  type AccountFormState,
+} from "@/app/actions/action";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 // Submit Button with loading state
 function SubmitButton() {
   const { pending } = useFormStatus();
-
-  {
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        const element = document.querySelector('[role="alert"]');
-        if (element) element.remove();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }, []);
-  }
 
   return (
     <button
@@ -32,24 +26,32 @@ function SubmitButton() {
       {pending ? (
         <>
           <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-          Uploading...
+          Editing...
         </>
       ) : (
-        "Upload"
+        "Edit"
       )}
     </button>
   );
 }
 
-export default function AddAccountPage() {
+export default function EditAccountPage({
+  account,
+}: {
+  account: AccountTypes;
+}) {
   const router = useRouter();
-  const [selectedChains, setSelectedChains] = useState<string[]>([]);
+  const [selectedChains, setSelectedChains] = useState<string[]>(
+    account?.chains || []
+  );
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [profilePreview, setProfilePreview] = useState<string | null>(null);
+  const [profilePreview, setProfilePreview] = useState<string | null>(
+    account?.imageUrl || null
+  );
   const formRef = useRef<HTMLFormElement>(null);
 
   const initialState: AccountFormState = {};
-  const [state, formAction] = useActionState(addAccount, initialState);
+  const [state, formAction] = useActionState(EditAccount, initialState);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -64,7 +66,7 @@ export default function AddAccountPage() {
     if (state.success) {
       // Wait a moment to show success message before redirecting
       const timer = setTimeout(() => {
-        // router.push("/admin/dashboard");
+        router.push("/admin/dashboard");
       }, 1500);
 
       return () => clearTimeout(timer);
@@ -103,6 +105,7 @@ export default function AddAccountPage() {
                 placeholder="Name"
                 className="adminInput w-full text-white"
                 aria-describedby="name-error"
+                defaultValue={account?.name}
               />
               {state.errors?.name && (
                 <p id="name-error" className="text-red-500 text-sm mt-1">
@@ -118,6 +121,7 @@ export default function AddAccountPage() {
                 placeholder="Wallet Address"
                 className="adminInput w-full text-white"
                 aria-describedby="wallet-error"
+                defaultValue={account?.wallet}
               />
               {state.errors?.wallet && (
                 <p id="wallet-error" className="text-red-500 text-sm mt-1">
@@ -132,6 +136,7 @@ export default function AddAccountPage() {
                 name="twitter"
                 placeholder="X handle"
                 className="adminInput w-full text-white"
+                defaultValue={account?.twitter}
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full flex items-center justify-center">
                 <svg
@@ -168,6 +173,7 @@ export default function AddAccountPage() {
                 name="telegram"
                 placeholder="Telegram handle"
                 className="adminInput w-full text-white"
+                defaultValue={account?.telegram}
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full flex items-center justify-center">
                 <svg
@@ -197,6 +203,14 @@ export default function AddAccountPage() {
                   className="hidden"
                   onChange={handleFileChange}
                 />
+                {account.imageUrl && (
+                  <input
+                    type="text"
+                    name="defaultImageUrl"
+                    value={account.imageUrl}
+                    className="hidden"
+                  />
+                )}
                 <div className="w-full h-full flex flex-col items-center justify-center">
                   {profilePreview ? (
                     <img

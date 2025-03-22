@@ -18,7 +18,9 @@ const featureCards: FeatureCard[] = [
     title: "Track Trades from Leading Wallets",
     description:
       "Gain a competitive edge by monitoring real-time trades from the most successful and influential wallets to make smarter investment decisions.",
-    backgroundClass: "bg-black",
+    backgroundClass: "!bg-black",
+    hasImage: true,
+    imageUrl: "/diamond.png",
   },
   {
     id: "explore-tokens",
@@ -35,7 +37,9 @@ const featureCards: FeatureCard[] = [
     title: "Examine Top Performing Wallets",
     description:
       "Dive into the strategies of high-performing wallets to uncover insights, track winning moves, and refine your own trading approach.",
-    backgroundClass: "bg-black",
+    backgroundClass: "!bg-black",
+    hasImage: true,
+    imageUrl: "/diamond.png",
   },
 ];
 
@@ -59,12 +63,12 @@ export const TraderPlatform: React.FC = () => {
       </div>
 
       <div className="flex  justify-center  items-center flex-col max-w-screen-2xl mx-auto lg:flex-row gap-[33px]">
-        {featureCards.map((card) => (
+        {featureCards.map((card, index) => (
           <div
             key={card.id}
             className={cn(
               " h-[605px] relative rounded-[12px]  border border-[#333333]  flex flex-col max-w-[430px] mx-auto  overflow-hidden",
-              card.imageUrl && "bgg"
+              index == 1 && "bgg"
             )}
           >
             {card.imageUrl && (
@@ -76,11 +80,11 @@ export const TraderPlatform: React.FC = () => {
                 className="w-full max-h-[40%]  absolute bottom-0 -right-[20%]"
               />
             )}
-            <div className="z-10 p-6 lg:pr-[120px] pr-[110px]">
-              <h2 className="lg:text-[30px] text-[24px]  font-bold mb-4">
+            <div className="z-10 p-6 ">
+              <h2 className="lg:text-[30px] text-[24px] lg:pr-[6px] pr-[56px]  font-bold mb-4">
                 {card.title}
               </h2>
-              <p className="lg:text-[20px] text-[16px] tracking-[22%] font-aktiv-regular font-light leading-[100%] text-white/80">
+              <p className="lg:text-[20px] text-[16px] tracking-[4.4px] font-aktiv-regular font-light leading-normal text-white/[0.77]">
                 {card.description}
               </p>
             </div>

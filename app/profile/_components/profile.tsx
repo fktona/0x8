@@ -1,56 +1,81 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import TradeItem from "./item";
 import TokenHolding from "./holdings";
 import TokenPnlItem from "./pnl";
 import Image from "next/image";
+import { TokenHoldings, TradeTransaction, UserProfile } from "@/types";
+import { formatNumber2, groupTransactionsByTokenPair } from "@/libs/utils";
+import { Copy } from "lucide-react";
+import { getUserPnl, getUserTokenHoldings } from "@/app/actions/action";
 
-export default function ProfilePage() {
+export default function ProfilePage({
+  trades,
+  profile,
+}: {
+  trades: TradeTransaction[];
+  profile: UserProfile;
+}) {
   const router = useRouter();
   const [activePeriod, setActivePeriod] = useState("1d");
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("BNB");
+  const [activeTab, setActiveTab] = useState(profile?.chains[0].toUpperCase());
+  const [holdings, setHoldings] = useState<TokenHoldings[]>([]);
 
-  // Generate holdings data
-  const holdings = Array(8)
-    .fill(null)
-    .map(() => ({
-      token: "PONKE",
-      value: "$34,908,876.90",
-    }));
+  const combinedAddresses = [
+    ...new Set(
+      trades.flatMap(({ tokenOutAddress, tokenInAddress }) => [
+        tokenOutAddress,
+        tokenInAddress,
+      ])
+    ),
+  ];
+  function getTotalUSDBalance(tokens: TokenHoldings[]) {
+    return tokens.reduce((total, token) => total + token.tokenBalanceUSD, 0);
+  }
 
-  // Add BNB as first holding
-  holdings[0] = {
-    token: "BNB",
-    value: "$34,908,876.90",
+  console.log(combinedAddresses);
+
+  const groupTrade = groupTransactionsByTokenPair(trades);
+
+  console.log(groupTrade);
+
+  const fetchTokenPnl = async () => {
+    const tokenspnl = await getUserPnl({
+      wallet: trades[0].wallet,
+      chain: activeTab,
+      tokens: combinedAddresses.slice(0, 5),
+    });
+    console.log(tokenspnl, "tokenspnl");
+    // setHoldings(tokenHoldings);
+
+    return tokenspnl;
   };
 
-  // Generate trades data
-  const trades = Array(8)
-    .fill(null)
-    .map((_, index) => ({
-      type: index % 3 === 0 ? "Sell" : "Buy",
-      amount: "45.5M",
-      token: "PONKE",
-      price: "23.4",
-      currency: "BNB",
-      time: "2hr",
-    }));
+  const [holdingisLoading, setholdingIsLoading] = useState(false);
 
-  // Generate PNL data
-  const pnlData = Array(15)
-    .fill(null)
-    .map(() => ({
-      token: "PONKE",
-      marketCap: "56.6K",
-      priceChange: "-30.1%",
-      priceChangeValue: "-$234.78",
-      buyPrice: "23.56 BNB",
-      sellAmount: "34.5M",
-      time: "10m",
-    }));
+  const fetchTokenHoldings = async () => {
+    setholdingIsLoading(true);
+    try {
+      const tokenHoldings = await getUserTokenHoldings({
+        wallet: trades[0].wallet,
+        chain: activeTab,
+      });
+      console.log(tokenHoldings, "tokenspnl");
+      setHoldings(tokenHoldings);
+    } catch (error) {
+      console.error("Error fetching token holdings:", error);
+    } finally {
+      setholdingIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTokenHoldings();
+    fetchTokenPnl();
+  }, [activeTab]);
 
   return (
     <div className="min-h-screen  text-white flex flex-col">
@@ -66,7 +91,10 @@ export default function ProfilePage() {
             </button>
 
             <div className="flex items-center gap-3">
-              <button className="flex items-center gap-2 bg-yellow-400 text-black rounded-[13px] px-4 py-2">
+              <button
+                onClick={fetchTokenHoldings}
+                className="flex items-center gap-2 bg-yellow-400 text-black rounded-[13px] px-4 py-2"
+              >
                 Alerts{" "}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +143,7 @@ export default function ProfilePage() {
             <div className="flex items-start gap-4 mb-6">
               <div className="w-[135px] h-[135px] rounded-full flex items-center justify-center ">
                 <Image
-                  src={"/profile-placeholder.svg"}
+                  src={profile?.imageUrl || "/profile-placeholder.svg"}
                   alt={"BNB"}
                   width={300}
                   height={300}
@@ -125,73 +153,106 @@ export default function ProfilePage() {
 
               <div className="mt-[25px] relative">
                 <div className="flex font-aktiv-regular  items-center gap-[30px]">
-                  <h2 className="text-[32px]">ROBO</h2>
-                  <Image
-                    src={"/x.svg"}
-                    alt={"X"}
-                    width={25}
-                    height={25}
-                    className="rounded-full"
-                  />
-                  <Image
-                    src={"/telegram.svg"}
-                    alt={"X"}
-                    width={29}
-                    height={29}
-                    className="rounded-full"
-                  />
+                  <h2 className="md:text-[32px] text-[20px]">
+                    {profile?.name}
+                  </h2>
+                  {profile?.twitter && (
+                    <Image
+                      src={"/x.svg"}
+                      alt={"X"}
+                      width={25}
+                      height={25}
+                      className="rounded-full"
+                    />
+                  )}
+
+                  {profile?.telegram && (
+                    <Image
+                      src={"/telegram.svg"}
+                      alt={"X"}
+                      width={25}
+                      height={25}
+                      className="rounded-full"
+                    />
+                  )}
+                  <button
+                    className="flex items-center active:scale-90 opacity-75 md:text-[32px] text-[20px] justify-center gap-1"
+                    onClick={() => {
+                      navigator.clipboard
+                        .writeText(profile?.wallet || "")
+                        .then(() => {
+                          // Optional: Add visual feedback here in a full solution
+                          console.log("Copied wallet address");
+                        })
+                        .catch((err) => console.error("Failed to copy: ", err));
+                    }}
+                    title="Copy wallet address"
+                  >
+                    {profile?.wallet.slice(-6)} <Copy size={20} />
+                  </button>
                 </div>
               </div>
             </div>
             <div className="flex lg:text-[16px] text-[12px] lg:mt-[25px] font-aktiv-medium font-medium lg:gap-[31px] gap-2">
-              <button
-                className={`px-[9px] lg:py-[10px] py-1.5 rounded-[10px]  flex items-center gap-1 ${
-                  activeTab === "BNB" ? "bg-white text-black" : "bg-transparent"
-                }`}
-                onClick={() => setActiveTab("BNB")}
-              >
-                <Image
-                  src={"/bnb.svg"}
-                  alt={"BNB"}
-                  width={20}
-                  height={20}
-                  className="rounded-full"
-                />
-                BNB
-              </button>
-              <button
-                className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
-                  activeTab === "ETH" ? "bg-white text-black" : "bg-transparent"
-                }`}
-                onClick={() => setActiveTab("ETH")}
-              >
-                <Image
-                  src={"/eth.svg"}
-                  alt={"BNB"}
-                  width={20}
-                  height={20}
-                  className="rounded-full"
-                />
-                ETH
-              </button>
-              <button
-                className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
-                  activeTab === "BASE"
-                    ? "bg-white text-black"
-                    : "bg-transparent"
-                }`}
-                onClick={() => setActiveTab("BASE")}
-              >
-                <Image
-                  src={"/base.svg"}
-                  alt={"BNB"}
-                  width={20}
-                  height={20}
-                  className="rounded-full"
-                />
-                BASE
-              </button>
-              {["1d", "3d", "7d", "14d", "30d"].map((period) => (
+              {profile?.chains.includes("bsc") && (
+                <button
+                  className={`px-[9px] lg:py-[10px] py-1.5 rounded-[10px]  flex items-center gap-1 ${
+                    activeTab === "BNB"
+                      ? "bg-white text-black"
+                      : "bg-transparent"
+                  }`}
+                  onClick={() => setActiveTab("BNB")}
+                >
+                  <Image
+                    src={"/bnb.svg"}
+                    alt={"BNB"}
+                    width={20}
+                    height={20}
+                    className="rounded-full"
+                  />
+                  BNB
+                </button>
+              )}
+
+              {profile?.chains.includes("eth") && (
+                <button
+                  className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
+                    activeTab === "ETH"
+                      ? "bg-white text-black"
+                      : "bg-transparent"
+                  }`}
+                  onClick={() => setActiveTab("ETH")}
+                >
+                  <Image
+                    src={"/eth.svg"}
+                    alt={"BNB"}
+                    width={20}
+                    height={20}
+                    className="rounded-full"
+                  />
+                  ETH
+                </button>
+              )}
+              {profile?.chains.includes("base") && (
+                <button
+                  className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
+                    activeTab === "BASE"
+                      ? "bg-white text-black"
+                      : "bg-transparent"
+                  }`}
+                  onClick={() => setActiveTab("BASE")}
+                >
+                  <Image
+                    src={"/base.svg"}
+                    alt={"BNB"}
+                    width={20}
+                    height={20}
+                    className="rounded-full"
+                  />
+                  BASE
+                </button>
+              )}
+              {/* {["1d", "3d", "7d", "14d", "30d"].map((period) => (
                 <button
                   key={period}
                   className={` px-[9px] lg:py-[10px] py-1.5 rounded-[10px] lg:hidden ${
@@ -201,7 +262,7 @@ export default function ProfilePage() {
                 >
                   {period}
                 </button>
-              ))}
+              ))} */}
             </div>
 
             {/* Token Filters */}
@@ -227,56 +288,37 @@ export default function ProfilePage() {
       {/* Main Content */}
       <div className="flex-grow p-4 text-[18px] font-aktiv-regular  grid grid-cols-1 lg:grid-cols-7 gap-6">
         {/* Top Holdings */}
-        <div className="bg-[#0C0C0C]  border border-white/10 rounded-lg col-span-3 overflow-hidden">
+        <div className="bg-[#0C0C0C]  lg:h-[390px] h-[320px] custom-scrollbar overflow-y-auto  border border-white/10 rounded-lg col-span-3 overflow-hidden">
           <div className="flex items-center py-[17.11px] justify-between p-3 border-b border-white/10">
             <h3 className="font-medium">TOP HOLDINGS</h3>
-            <span className="text-white/80">{holdings[0].value}</span>
+            <span className="text-white/80">
+              ${formatNumber2(getTotalUSDBalance(holdings).toString())}
+            </span>
           </div>
 
           <div className="">
-            {holdings.map((holding, index) => (
-              <TokenHolding
-                key={index}
-                token={holding.token}
-                value={holding.value}
-              />
-            ))}
+            {holdingisLoading
+              ? Array(10)
+                  .fill(null)
+                  .map((_, index) => (
+                    //@ts-ignore
+                    <TokenHolding key={index} data={null} loading={true} />
+                  ))
+              : holdings?.map((holding, index) => (
+                  <TokenHolding key={index} data={holding} loading={false} />
+                ))}
           </div>
         </div>
 
         {/* DEFI Trades */}
-        <div className="bg-[#0C0C0C]  border font-aktiv-regular col-span-4 text-[16px] border-white/10 rounded-lg overflow-hidden">
-          <div className="flex items-center w-full gap-4 justify-between p-3 border-b border-white/10">
+        <div className="bg-[#0C0C0C] lg:h-[390px] h-[320px] custom-scrollbar overflow-y-auto  border font-aktiv-regular col-span-4 text-[16px] border-white/10 rounded-lg overflow-hidden">
+          <div className="flex items-center w-full gap-4 justify-between p-3 py-[17.11px] border-b border-white/10">
             <h3 className="font-medium">DEFI TRADES</h3>
-
-            <div className="ml-auto relative">
-              <input
-                type="text"
-                placeholder="Enter wallet address"
-                className="flex lg:w-[538px] h-[38px] p-[10px] flex-col justify-center items-center gap-[10px] rounded-[80px] bg-[rgba(12,12,12,0.93)]"
-              />
-
-              <Image
-                src="/searchIcon.svg"
-                alt="Enter wallet address"
-                width={16}
-                height={16}
-                className="absolute right-[20px] lg:top-[20px] top-3"
-              />
-            </div>
           </div>
 
           <div className="divide-y divide-white/5">
             {trades.map((trade, index) => (
-              <TradeItem
-                key={index}
-                type={trade.type}
-                amount={trade.amount}
-                token={trade.token}
-                price={trade.price}
-                currency={trade.currency}
-                time={trade.time}
-              />
+              <TradeItem {...trade} key={index} />
             ))}
           </div>
         </div>
@@ -331,18 +373,13 @@ export default function ProfilePage() {
 
           {/* Token PNL Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 px-[8px] py-[10px] gap-x-[11px] gap-y-[15px]">
-            {pnlData.map((item, index) => (
-              <TokenPnlItem
-                key={index}
-                token={item.token}
-                marketCap={item.marketCap}
-                priceChange={item.priceChange}
-                priceChangeValue={item.priceChangeValue}
-                buyPrice={item.buyPrice}
-                sellAmount={item.sellAmount}
-                time={item.time}
-              />
-            ))}
+            {Object.entries(groupTrade).map(([symbol, transactions]) =>
+              transactions
+                .slice(0, 2)
+                .map((tx, index) => (
+                  <TokenPnlItem symbol={symbol} key={index} {...tx} />
+                ))
+            )}
           </div>
         </div>
       </div>

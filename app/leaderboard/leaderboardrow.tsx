@@ -1,4 +1,6 @@
 import ProfileLink from "@/components/profile-link";
+import { formatNumber } from "@/libs/utils";
+import { LeaderBoard } from "@/types";
 import Image from "next/image";
 interface LeaderboardRowProps {
   rank: number;
@@ -10,18 +12,22 @@ interface LeaderboardRowProps {
 }
 
 export default function LeaderboardRow({
+  data,
   rank,
-  name,
-  walletAddress,
-  winLoss,
-  profit,
-  usdValue,
-}: LeaderboardRowProps) {
+  activeTab,
+}: {
+  data: LeaderBoard;
+  rank: number;
+  activeTab: string;
+}) {
   // Determine background color based on rank
   let bgColor = "bg-black";
   if (rank === 1) bgColor = "rank1";
   else if (rank === 2) bgColor = "rank2";
   else if (rank === 3) bgColor = "rank3";
+
+  const win = data.pnlSummary.totalPnlPercentage > 0;
+  const winLoss = win ? "Win" : "Loss";
 
   return (
     <div
@@ -54,16 +60,16 @@ export default function LeaderboardRow({
         </div>
 
         <div className="flex items-center gap-2">
-          <ProfileLink walletAddress={walletAddress}>
+          <ProfileLink walletAddress={data.wallet}>
             <Image
-              src={"/profile-placeholder.svg"}
+              src={data.imageUrl || "/profile-placeholder.svg"}
               alt={"X"}
-              width={20}
-              height={20}
+              width={24}
+              height={24}
               className="rounded-full"
             />
           </ProfileLink>
-          <span className="text-[16px]  font-medium">{name}</span>
+          <span className="text-[16px]  font-medium">{data.name}</span>
           <Image
             src={"/x.svg"}
             alt={"X"}
@@ -79,13 +85,28 @@ export default function LeaderboardRow({
             className="rounded-full"
           />
 
-          <span className="text-[16px]   lg:ml-[40px]">{walletAddress}</span>
+          <span className="text-[16px]   lg:ml-[40px]">{data.wallet}</span>
         </div>
       </div>
 
       <div className="flex items-center gap-6">
-        <div className="text-green-500 text-[16px] ">{winLoss}</div>
-        <div className="text-green-500 text-[16px] ">{profit}</div>
+        <div
+          className={
+            win ? "text-green-500 text-[16px]" : "text-red-500 text-[16px]"
+          }
+        >
+          {formatNumber(data.pnlSummary.totalPnlPercentage)} %
+        </div>
+        <div
+          className={
+            win
+              ? "text-green-500 uppercase text-[16px]"
+              : "text-red-500 text-[16px]"
+          }
+        >
+          {formatNumber(data.pnlSummary.totalBuys)} {activeTab}
+        </div>
+
         <div className="flex items-center gap-1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +122,9 @@ export default function LeaderboardRow({
               stroke-linejoin="round"
             />
           </svg>
-          <span className="text-[16px] text-white/80">{usdValue}</span>
+          <span className="text-[16px] text-white/80">
+            ${formatNumber(data.pnlSummary.totalPnlUSD)}
+          </span>
         </div>
       </div>
     </div>

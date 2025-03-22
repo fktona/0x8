@@ -1,23 +1,43 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LeaderboardRow from "./leaderboardrow";
-const leaderboardData = Array(15)
-  .fill(null)
-  .map((_, index) => ({
-    rank: index + 1,
-    name: "ROBO",
-    walletAddress: "hgkRWt1nFFhgkRWt1nFFurur",
-    winLoss: "34/1",
-    profit: "+341.19 BNB",
-    usdValue: "$23,548.9",
-  }));
+import { getLeaderBoard } from "../actions/action";
+import LeaderboardRowSkeleton from "./leader-board-sk";
+import type { LeaderBoard } from "@/types";
+import { useTransition } from "react";
 
 export default function LeaderboardPage() {
-  const [activeTab, setActiveTab] = useState("BNB");
-  const [activePeriod, setActivePeriod] = useState("Daily");
+  const [activeTab, setActiveTab] = useState("BSC");
+  const [error, setError] = useState<string | null>(null);
+  const [boardData, setBoardData] = useState<LeaderBoard[]>([]);
+  const [isPending, startTransition] = useTransition();
 
-  // Generate leaderboard data
+  useEffect(() => {
+    // Use startTransition to handle the async state updates
+    startTransition(async () => {
+      setError(null);
+      try {
+        const res = await getLeaderBoard(activeTab);
+        if (res && res.length > 0) {
+          setBoardData(res);
+        } else {
+          setBoardData([]);
+          setError("No leaderboard data available for this chain.");
+        }
+      } catch (error) {
+        console.error("Error fetching leaderboard data", error);
+        setError("Failed to load leaderboard data. Please try again later.");
+      }
+    });
+  }, [activeTab]);
+
+  // Handle tab changes with transitions
+  const handleTabChange = (tab: string) => {
+    startTransition(() => {
+      setActiveTab(tab);
+    });
+  };
 
   return (
     <div className="min-h-screen max-w-[960px] mx-auto bg-black text-white">
@@ -31,10 +51,11 @@ export default function LeaderboardPage() {
 
             <div className="flex text-[16px] font-aktiv-medium font-medium lg:ml-4 gap-2">
               <button
-                className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
-                  activeTab === "BNB" ? "bg-white text-black" : "bg-transparent"
+                className={`px-[9px] py-[10px] rounded-[10px] flex items-center gap-1 ${
+                  activeTab === "BSC" ? "bg-white text-black" : "bg-transparent"
                 }`}
-                onClick={() => setActiveTab("BNB")}
+                onClick={() => handleTabChange("BSC")}
+                disabled={isPending}
               >
                 <Image
                   src={"/bnb.svg"}
@@ -46,14 +67,15 @@ export default function LeaderboardPage() {
                 BNB
               </button>
               <button
-                className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
+                className={`px-[9px] py-[10px] rounded-[10px] flex items-center gap-1 ${
                   activeTab === "ETH" ? "bg-white text-black" : "bg-transparent"
                 }`}
-                onClick={() => setActiveTab("ETH")}
+                onClick={() => handleTabChange("ETH")}
+                disabled={isPending}
               >
                 <Image
                   src={"/eth.svg"}
-                  alt={"BNB"}
+                  alt={"ETH"}
                   width={20}
                   height={20}
                   className="rounded-full"
@@ -61,16 +83,17 @@ export default function LeaderboardPage() {
                 ETH
               </button>
               <button
-                className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
+                className={`px-[9px] py-[10px] rounded-[10px] flex items-center gap-1 ${
                   activeTab === "BASE"
                     ? "bg-white text-black"
                     : "bg-transparent"
                 }`}
-                onClick={() => setActiveTab("BASE")}
+                onClick={() => handleTabChange("BASE")}
+                disabled={isPending}
               >
                 <Image
                   src={"/base.svg"}
-                  alt={"BNB"}
+                  alt={"BASE"}
                   width={20}
                   height={20}
                   className="rounded-full"
@@ -79,48 +102,25 @@ export default function LeaderboardPage() {
               </button>
             </div>
           </div>
-
-          <div className="flex rounded-full lg:w-auto w-fit mt-5 lg:mt-0  bg-gray-800 lg:p-1">
-            <button
-              className={`px-[20px] py-[10px]  flex items-center rounded-full ${
-                activePeriod === "Daily" ? "bg-white text-black" : ""
-              }`}
-              onClick={() => setActivePeriod("Daily")}
-            >
-              Daily
-            </button>
-            <button
-              className={`px-[20px] py-[10px]  flex items-center rounded-full ${
-                activePeriod === "Weekly" ? "bg-white text-black" : ""
-              }`}
-              onClick={() => setActivePeriod("Weekly")}
-            >
-              Weekly
-            </button>
-            <button
-              className={`px-[20px] py-[10px]  flex items-center rounded-full ${
-                activePeriod === "Monthly" ? "bg-white text-black" : ""
-              }`}
-              onClick={() => setActivePeriod("Monthly")}
-            >
-              Monthly
-            </button>
-          </div>
         </div>
 
         {/* Leaderboard List */}
+        {error && (
+          <div className="text-center text-red-500 font-bold">{error}</div>
+        )}
         <div className="space-y-2 mt-[30px]">
-          {leaderboardData.map((item, index) => (
-            <LeaderboardRow
-              key={index}
-              rank={item.rank}
-              name={item.name}
-              walletAddress={item.walletAddress}
-              winLoss={item.winLoss}
-              profit={item.profit}
-              usdValue={item.usdValue}
-            />
-          ))}
+          {!isPending && boardData.length > 0
+            ? boardData.map((item, index) => (
+                <LeaderboardRow
+                  key={index}
+                  rank={index + 1}
+                  data={item}
+                  activeTab={activeTab}
+                />
+              ))
+            : Array(15)
+                .fill(null)
+                .map((_, index) => <LeaderboardRowSkeleton key={index} />)}
         </div>
       </div>
     </div>

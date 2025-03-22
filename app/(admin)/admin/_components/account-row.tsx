@@ -1,52 +1,64 @@
 "use client";
 import ProfileLink from "@/components/profile-link";
+import { UserProfile } from "@/types";
 import Image from "next/image";
+import Link from "next/link";
 
 interface AccountProps {
-  account: {
-    id: number;
-    name: string;
-    walletAddress: string;
-    platforms: string[];
-    tokens: string[];
-  };
-  onDelete: (id: number) => void;
+  account: UserProfile;
+  onDelete: (id: string) => void;
+  index: number;
 }
 
-export default function AccountRow({ account, onDelete }: AccountProps) {
+export default function AccountRow({ account, onDelete, index }: AccountProps) {
   return (
     <div className="flex flex-wrap items-center justify-between p-3 text-sm md:text-[18px] text-white/80 rounded-lg bg-black border border-white/10 gap-y-2">
       {/* Left Section */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <div className="w-6 text-center font-medium">{account.id}</div>
-
-        <div className="flex items-center gap-2 flex-wrap">
-          <ProfileLink walletAddress={account.walletAddress}>
+      <div className="flex items-center min-w-[50%] justify-between relative   gap-3 flex-wrap">
+        <div className="flex items-center gap-2 text-start justify-between w-full flex-wrap">
+          <div className="w-6 text-center font-medium">{index + 1}</div>
+          <ProfileLink walletAddress={account.wallet}>
             <Image
-              src={"/profile-placeholder.svg"}
+              src={account?.imageUrl || "/profile-placeholder.svg"}
               alt={"profile"}
               width={38}
               height={38}
               className="rounded-full"
             />
           </ProfileLink>
-          <span className="font-medium">{account.name}</span>
+          <span className="font-medium">
+            {account.name.length > 7
+              ? `${account.name.substring(0, 7)}...`
+              : account.name}
+          </span>
 
-          {account.platforms.includes("x") && (
-            <Image src={"/x.svg"} alt="X" width={24} height={24} />
+          {account.twitter && (
+            <a
+              href={`https://x.com/${account.twitter}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Image src={"/x.svg"} alt="X" width={24} height={24} />
+            </a>
           )}
 
-          {account.platforms.includes("telegram") && (
-            <Image
-              src={"/telegram.svg"}
-              alt="Telegram"
-              width={28}
-              height={28}
-            />
+          {account.telegram && (
+            <a
+              href={`https://t.me/${account.telegram}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Image
+                src={"/telegram.svg"}
+                alt="Telegram"
+                width={28}
+                height={28}
+              />
+            </a>
           )}
 
           <span className="text-gray-400 truncate max-w-[150px] sm:max-w-none">
-            {account.walletAddress}
+            {account.wallet}
           </span>
         </div>
       </div>
@@ -55,26 +67,34 @@ export default function AccountRow({ account, onDelete }: AccountProps) {
       <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
         {/* Tokens */}
         <div className="flex items-center gap-2">
-          {account.tokens.includes("bnb") && (
+          {account?.chains?.includes("bsc") && (
             <Image src={"/bnb.svg"} alt={"bnb"} width={30} height={34} />
           )}
 
-          {account.tokens.includes("eth") && (
+          {account?.chains?.includes("eth") && (
             <Image src={"/eth.svg"} alt={"eth"} width={34} height={34} />
           )}
 
-          {account.tokens.includes("base") && (
+          {account?.chains?.includes("base") && (
             <Image src={"/base.svg"} alt={"base"} width={34} height={34} />
           )}
         </div>
 
         {/* Edit Button */}
-        <button className="px-5 sm:px-[20px] text-base sm:text-[21px] py-2 sm:py-[7px] bg-white text-black rounded-full font-medium">
-          Edit
-        </button>
+        <Link
+          className="flex items-center gap-2"
+          href={`/admin/edit-account/${account.wallet}`}
+        >
+          <button className="px-5 sm:px-[20px] text-base sm:text-[21px] py-2 sm:py-[7px] bg-white text-black rounded-full font-medium">
+            Edit
+          </button>
+        </Link>
 
         {/* Delete Button */}
-        <button className="text-red-500" onClick={() => onDelete(account.id)}>
+        <button
+          className="text-red-500"
+          onClick={() => onDelete(account.wallet)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="30"

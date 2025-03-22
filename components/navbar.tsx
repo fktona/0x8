@@ -1,38 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/libs/utils";
-
-const tokenDetails = [
-  {
-    name: "BNB",
-    icon: "/bnb.svg",
-    balance: 8888,
-    gasIcon: "/bnb-gas.svg",
-    gas: "1 GWei",
-  },
-  {
-    name: "ETH",
-    icon: "/eth.svg",
-    balance: 8888,
-    gasIcon: "/eth-gas.svg",
-    gas: "0.6 GWei",
-  },
-  {
-    name: "BASE",
-    icon: "/base.svg",
-    balance: 8888,
-    gasIcon: "/eth-gas.svg",
-    gas: "0.6 GWei",
-  },
-];
+import { cn, formatNumber } from "@/libs/utils";
+import { TopInfo } from "@/app/actions/action";
+import { CryptoData } from "@/types";
 
 function Navbar() {
   const path = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  const [tokenDetails, setTokenDetails] = useState<CryptoData | null>(null);
+  useEffect(() => {
+    const fetchTokenDetails = async () => {
+      const res = await TopInfo();
+      setTokenDetails(res);
+    };
+    fetchTokenDetails();
+  }, []);
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -48,26 +33,29 @@ function Navbar() {
             </h1>
           </Link>
           <ul className="flex gap-3 overflow-x-auto w-max">
-            {tokenDetails.map((token, index) => (
-              <li
-                key={index}
-                className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center"
-              >
-                <Image
-                  src={token.icon}
-                  alt={token.name}
-                  width={20}
-                  height={20}
-                />
-                <span>{token.balance}</span>
-                <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
-                <Image src={token.gasIcon} alt="gas" width={20} height={20} />
-                <p>{token.gas}</p>
-              </li>
-            ))}
+            <li className="px-2 py-1 min-w-[150px] lg:min-w-[180px] text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+              <Image src="/eth.svg" alt={"eth"} width={20} height={20} />
+              <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+              <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+              <Image src={"/eth-gas.svg"} alt="gas" width={20} height={20} />
+              <p>{formatNumber(tokenDetails?.data?.eth?.gas)} Gwei</p>
+            </li>
+
+            <li className="px-2 py-1 min-w-[150px] lg:min-w-[180px] text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+              <Image src="/bsc.svg" alt={"bsc"} width={20} height={20} />
+              <span>{formatNumber(tokenDetails?.data?.bnb?.price)}</span>
+              <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+              <Image src={"/bnb-gas.svg"} alt="gas" width={20} height={20} />
+              <p>{formatNumber(tokenDetails?.data?.bnb?.gas)}</p>
+            </li>
+
+            <li className="px-2 py-1 text-xs min-w-[150px] lg:min-w-[180px] rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+              <Image src="/base.svg" alt={"base"} width={24} height={24} />
+              <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+            </li>
           </ul>
         </div>
-        <ul className="flex gap-10 items-center">
+        <ul className="flex gap-4 items-center">
           {["/trades", "/tokens", "/leaderboard"].map((route, index) => (
             <li
               key={index}
@@ -81,6 +69,38 @@ function Navbar() {
               <Link href={route}>{route.replace("/", "")}</Link>
             </li>
           ))}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="21"
+            height="21"
+            viewBox="0 0 21 21"
+            fill="none"
+          >
+            <g clip-path="url(#clip0_2001_940)">
+              <mask
+                id="mask0_2001_940"
+                style={{ maskType: "alpha" }}
+                maskUnits="userSpaceOnUse"
+                x="0"
+                y="0"
+                width="21"
+                height="21"
+              >
+                <path d="M0 0H21V21H0V0Z" fill="white" />
+              </mask>
+              <g mask="url(#mask0_2001_940)">
+                <path
+                  d="M16.5375 0.984009H19.758L12.723 9.04501L21 20.016H14.52L9.441 13.3635L3.636 20.016H0.4125L7.9365 11.391L0 0.985509H6.645L11.229 7.06501L16.5375 0.984009ZM15.405 18.084H17.19L5.67 2.81551H3.756L15.405 18.084Z"
+                  fill="white"
+                />
+              </g>
+            </g>
+            <defs>
+              <clipPath id="clip0_2001_940">
+                <rect width="21" height="21" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
         </ul>
       </div>
 
@@ -118,27 +138,28 @@ function Navbar() {
 
         {/* Token details scrollable area */}
         <div className="overflow-x-auto py-2 px-2 border-b border-gray-800">
-          <div className="flex gap-2 overflow-x-auto w-max">
-            {tokenDetails.map((token, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-1 bg-white/[0.08] rounded-full px-2 py-1 whitespace-nowrap text-xs"
-              >
-                <Image
-                  src={token.icon}
-                  alt={token.name}
-                  width={16}
-                  height={16}
-                />
-                <span className="text-white">
-                  ${token.balance.toLocaleString()}
-                </span>
-                <div className="bg-[#424242] w-[1px] h-4 mx-1"></div>
-                <Image src={token.gasIcon} alt="gas" width={16} height={16} />
-                <span className="text-white">{token.gas}</span>
-              </div>
-            ))}
-          </div>
+          <ul className="flex gap-2 overflow-x-auto w-max">
+            <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+              <Image src="/eth.svg" alt={"eth"} width={20} height={20} />
+              <span>{tokenDetails?.data?.eth?.price}</span>
+              <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+              <Image src={"/eth-gas.svg"} alt="gas" width={20} height={20} />
+              <p>{tokenDetails?.data?.eth?.gas}</p>
+            </li>
+
+            <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+              <Image src="/bsc.svg" alt={"bsc"} width={20} height={20} />
+              <span>{tokenDetails?.data?.bnb?.price}</span>
+              <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+              <Image src={"/bnb-gas.svg"} alt="gas" width={20} height={20} />
+              <p>{tokenDetails?.data?.bnb?.gas}</p>
+            </li>
+
+            <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+              <Image src="/base.svg" alt={"base"} width={24} height={24} />
+              <span>{tokenDetails?.data?.eth?.price}</span>
+            </li>
+          </ul>
         </div>
 
         {/* Mobile menu */}

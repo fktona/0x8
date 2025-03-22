@@ -1,44 +1,53 @@
+import { formatNumber, timeAgo } from "@/libs/utils";
+import { TradeTransaction } from "@/types";
 import Image from "next/image";
-interface TradeItemProps {
-  type: string;
-  amount: string;
-  token: string;
-  price: string;
-  currency: string;
-  time: string;
-}
 
 export default function TradeItem({
+  tokenInLogo,
+  tokenOutLogo,
+  tokenInSymbol,
+  tokenOutSymbol,
+  tokenInAmount,
+  tokenOutAmountUsd,
+  tokenOutAmount,
+  blockTimestamp,
+  chain,
   type,
-  amount,
-  token,
-  price,
-  currency,
-  time,
-}: TradeItemProps) {
+}: Partial<TradeTransaction>) {
   return (
     <div className="flex items-center justify-between p-3">
       <div
         className={`text-sm ${
-          type === "Buy" ? "text-green-500" : "text-red-500"
+          type === "buy"
+            ? "text-green-500 capitalize"
+            : "text-red-500 capitalize"
         }`}
       >
         {type}
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-sm">{amount}</span>
+        <span className="text-sm">{`${
+          type == "buy"
+            ? formatNumber(tokenInAmount)
+            : formatNumber(tokenOutAmount)
+        } `}</span>
         <Image
-          src={"/ponki.svg"}
-          alt={"BNB"}
+          src={
+            (type === "buy" ? tokenInLogo : tokenOutLogo) ||
+            (chain ? `/${chain}.svg` : "/default.svg")
+          }
+          alt={(type == "buy" ? tokenInSymbol : tokenOutSymbol) || "logo"}
           width={20}
           height={20}
           className="rounded-full"
         />
-        <span className="text-sm">{token}</span>
+        <span className="text-sm">
+          {type === "buy" ? tokenInSymbol : tokenOutSymbol}
+        </span>
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="text-sm">{price}</span>
+        <span className="text-sm">{formatNumber(tokenOutAmountUsd)}</span>
         <Image
           src={"/bnb.svg"}
           alt={"BNB"}
@@ -46,10 +55,14 @@ export default function TradeItem({
           height={20}
           className="rounded-full"
         />
-        <span className="text-sm">{currency}</span>
+        <span className="text-sm">
+          {type === "buy" ? tokenOutSymbol : tokenInSymbol}
+        </span>
       </div>
 
-      <div className="text-sm text-gray-400">{time}</div>
+      <div className="text-sm text-gray-400">
+        {timeAgo(blockTimestamp as string)}
+      </div>
     </div>
   );
 }

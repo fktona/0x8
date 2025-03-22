@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar";
 import Search from "@/components/search";
 import { aktive, aktivThin, aktiveBold, aktiveMedium } from "@/fonts/font";
 import Footer from "@/components/footer";
+import Initialize from "@/components/initialize";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,8 +23,8 @@ export default function RootLayout({
         className={` ${aktive.variable} ${aktivThin.variable} ${aktiveBold.variable}  ${aktiveMedium.variable} antialiased overflow-x-hidden`}
       >
         <Navbar />
-        <div className="lg:mt-[80px] mt-[27px]" />
-        {children}
+        <div className="lg:mt-[20px] mt-[27px]" />
+        <Initialize>{children}</Initialize>
         <Footer />
       </body>
     </html>

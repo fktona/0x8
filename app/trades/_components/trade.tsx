@@ -3,14 +3,19 @@
 import { useState } from "react";
 import Image from "next/image";
 import TradesList from "./trade-list";
+import { AlTransactionsProps } from "@/types";
 
-export default function TradeComponents() {
+export default function TradeComponents({
+  allTransactions,
+}: {
+  allTransactions: AlTransactionsProps[];
+}) {
   const [activeTab, setActiveTab] = useState("All");
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className=" bg-black text-white">
       {/* Realtime Trades Section */}
-      <div className="p-4">
+      <div className="p-4 lg:py-[38px] py-[20px]">
         <div className="flex lg:items-center lg:gap-2 mb-4 flex-col lg:flex-row gap-[28px]">
           <h4 className="flex  items-center text-[20px] font-aktiv-bold font-bold lg:justify-between gap-2">
             <div className="w-[11px] aspect-square bg-[#11FF00] rounded-full animate-pulse" />
@@ -27,9 +32,9 @@ export default function TradeComponents() {
             </button>
             <button
               className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
-                activeTab === "BNB" ? "bg-white text-black" : "bg-transparent"
+                activeTab === "BSC" ? "bg-white text-black" : "bg-transparent"
               }`}
-              onClick={() => setActiveTab("BNB")}
+              onClick={() => setActiveTab("BSC")}
             >
               <Image
                 src={"/bnb.svg"}
@@ -110,9 +115,17 @@ export default function TradeComponents() {
 
         {/* Trades Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <TradesList walletAddress="2mQRWt1nFFur" coinType="BASE" />
-          <TradesList walletAddress="hgjQRWt1nFFur" coinType="ETH" />
-          <TradesList walletAddress="hgjQRWt1nFFur" coinType="BNB" />
+          {
+            // Filter trades based on active tab
+            allTransactions
+              .filter((trade) => {
+                if (activeTab === "All") return trade;
+                return trade.transactions[0].chain === activeTab.toLowerCase();
+              })
+              .map((trade, index) => (
+                <TradesList key={index} trades={trade} />
+              ))
+          }
         </div>
       </div>
 
