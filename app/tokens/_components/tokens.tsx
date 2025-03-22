@@ -10,7 +10,7 @@ import ProfileLink from "@/components/profile-link";
 import { Copy } from "lucide-react";
 
 export default function TokensComponents() {
-  const [activeTab, setActiveTab] = useState("BNB");
+  const [activeTab, setActiveTab] = useState("BSC");
   const { transactions } = useTransactionsStore();
 
   // Group transactions by tokenOutSymbol
@@ -28,9 +28,9 @@ export default function TokensComponents() {
           <div className="flex text-[16px] font-aktiv-medium font-medium ml-4 gap-2">
             <button
               className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
-                activeTab === "BNB" ? "bg-white text-black" : "bg-transparent"
+                activeTab === "BSC" ? "bg-white text-black" : "bg-transparent"
               }`}
-              onClick={() => setActiveTab("BNB")}
+              onClick={() => setActiveTab("BSC")}
             >
               <Image
                 src={"/bnb.svg"}
@@ -95,6 +95,10 @@ export default function TokensComponents() {
             .sort(
               ([tokenOutSymbolA], [tokenOutSymbolB]) =>
                 tokenOutSymbolB.length - tokenOutSymbolA.length
+            )
+            .filter(
+              ([tokenOutSymbol, transactions]) =>
+                transactions[0].chain == activeTab.toLocaleLowerCase()
             )
             .map(([tokenOutSymbol, transactions]) => (
               <div

@@ -103,7 +103,7 @@ const TradeBox = ({
               key={index}
             >
               <div className="flex w-full flex-wrap justify-start  items-center gap-[6px] text-white/80 font-light">
-                <ProfileLink walletAddress={userWallets[0].address}>
+                <ProfileLink walletAddress={item.wallet}>
                   <Image
                     src={item.imageUrl || "/placeholder.svg"}
                     alt={item.name}

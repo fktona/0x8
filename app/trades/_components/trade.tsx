@@ -4,13 +4,15 @@ import { useState } from "react";
 import Image from "next/image";
 import TradesList from "./trade-list";
 import { AlTransactionsProps } from "@/types";
-
+import { useTransactionsStore } from "@/store/store";
 export default function TradeComponents({
   allTransactions,
 }: {
   allTransactions: AlTransactionsProps[];
 }) {
   const [activeTab, setActiveTab] = useState("All");
+
+  const { usersTransactions } = useTransactionsStore();
 
   return (
     <div className=" bg-black text-white">

@@ -46,7 +46,7 @@ function Navbar() {
               <span>{formatNumber(tokenDetails?.data?.bnb?.price)}</span>
               <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
               <Image src={"/bnb-gas.svg"} alt="gas" width={20} height={20} />
-              <p>{formatNumber(tokenDetails?.data?.bnb?.gas)}</p>
+              <p>{formatNumber(tokenDetails?.data?.bnb?.gas)} Gwei</p>
             </li>
 
             <li className="px-2 py-1 text-xs min-w-[150px] lg:min-w-[180px] rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
@@ -144,7 +144,7 @@ function Navbar() {
               <span>{tokenDetails?.data?.eth?.price}</span>
               <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
               <Image src={"/eth-gas.svg"} alt="gas" width={20} height={20} />
-              <p>{tokenDetails?.data?.eth?.gas}</p>
+              <p>{tokenDetails?.data?.eth?.gas} Gwei</p>
             </li>
 
             <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
@@ -152,7 +152,7 @@ function Navbar() {
               <span>{tokenDetails?.data?.bnb?.price}</span>
               <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
               <Image src={"/bnb-gas.svg"} alt="gas" width={20} height={20} />
-              <p>{tokenDetails?.data?.bnb?.gas}</p>
+              <p>{tokenDetails?.data?.bnb?.gas} Gwei</p>
             </li>
 
             <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
