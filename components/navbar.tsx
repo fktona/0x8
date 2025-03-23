@@ -139,29 +139,78 @@ function Navbar() {
         </div>
 
         {/* Token details scrollable area */}
-        <div className="overflow-x-auto py-2 px-2 border-b border-gray-800">
-          <ul className="flex gap-2 overflow-x-auto w-max">
-            <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-              <Image src="/eth.svg" alt={"eth"} width={20} height={20} />
-              <span>{tokenDetails?.data?.eth?.price}</span>
-              <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
-              <Image src={"/eth-gas.svg"} alt="gas" width={20} height={20} />
-              <p>{tokenDetails?.data?.eth?.gas} Gwei</p>
-            </li>
+        <div className="overflow-hidden py-2 px-2 border-b border-gray-800">
+          <div className="infinite-scroll">
+            <div className="infinite-scroll-content flex">
+              {/* First copy of items */}
+              <ul className="flex gap-2 min-w-max">
+                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                  <Image src="/eth.svg" alt={"eth"} width={20} height={20} />
+                  <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+                  <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+                  <Image
+                    src={"/eth-gas.svg"}
+                    alt="gas"
+                    width={20}
+                    height={20}
+                  />
+                  <p>{formatNumber(tokenDetails?.data?.eth?.gas)} Gwei</p>
+                </li>
 
-            <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-              <Image src="/bsc.svg" alt={"bsc"} width={20} height={20} />
-              <span>{tokenDetails?.data?.bnb?.price}</span>
-              <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
-              <Image src={"/bnb-gas.svg"} alt="gas" width={20} height={20} />
-              <p>{tokenDetails?.data?.bnb?.gas} Gwei</p>
-            </li>
+                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                  <Image src="/bsc.svg" alt={"bsc"} width={20} height={20} />
+                  <span>{formatNumber(tokenDetails?.data?.bnb?.price)}</span>
+                  <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+                  <Image
+                    src={"/bnb-gas.svg"}
+                    alt="gas"
+                    width={20}
+                    height={20}
+                  />
+                  <p>{formatNumber(tokenDetails?.data?.bnb?.gas)} Gwei</p>
+                </li>
 
-            <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-              <Image src="/base.svg" alt={"base"} width={24} height={24} />
-              <span>{tokenDetails?.data?.eth?.price}</span>
-            </li>
-          </ul>
+                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                  <Image src="/base.svg" alt={"base"} width={24} height={24} />
+                  <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+                </li>
+              </ul>
+
+              {/* Duplicate copy for seamless scrolling */}
+              <ul className="flex gap-2 min-w-max">
+                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                  <Image src="/eth.svg" alt={"eth"} width={20} height={20} />
+                  <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+                  <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+                  <Image
+                    src={"/eth-gas.svg"}
+                    alt="gas"
+                    width={20}
+                    height={20}
+                  />
+                  <p>{formatNumber(tokenDetails?.data?.eth?.gas)} Gwei</p>
+                </li>
+
+                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                  <Image src="/bsc.svg" alt={"bsc"} width={20} height={20} />
+                  <span>{formatNumber(tokenDetails?.data?.bnb?.price)}</span>
+                  <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+                  <Image
+                    src={"/bnb-gas.svg"}
+                    alt="gas"
+                    width={20}
+                    height={20}
+                  />
+                  <p>{formatNumber(tokenDetails?.data?.bnb?.gas)} Gwei</p>
+                </li>
+
+                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                  <Image src="/base.svg" alt={"base"} width={24} height={24} />
+                  <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         {/* Mobile menu */}

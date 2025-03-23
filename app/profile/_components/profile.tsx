@@ -132,7 +132,7 @@ export default function ProfilePage({
         <div className="relative z-10 p-4">
           <div className="flex justify-between items-center mb-6">
             <button
-              className="flex text-[31px] items-center gap-2 text-lg"
+              className="flex lg:text-[31px] items-center gap-2 text-lg"
               onClick={() => router.back()}
             >
               <ArrowLeft className="my-4" /> Profile
