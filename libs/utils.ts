@@ -45,7 +45,9 @@ export function formatNumber(value: string | number | undefined): string {
 
   // Format the number based on its size - use absolute value to remove negative signs
   const absNum = Math.abs(num);
-  if (absNum >= 1000000) {
+  if (absNum >= 1000000000) {
+    return (absNum / 1000000000).toFixed(2) + "B";
+  } else if (absNum >= 1000000) {
     return (absNum / 1000000).toFixed(2) + "M";
   } else if (absNum >= 1000) {
     return (absNum / 1000).toFixed(2) + "K";
