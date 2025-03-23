@@ -49,7 +49,7 @@ function Navbar() {
               <p>{formatNumber(tokenDetails?.data?.bnb?.gas)} Gwei</p>
             </li>
 
-            <li className="px-2 py-1 text-xs min-w-[150px] lg:min-w-[180px] rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+            <li className="px-2 py-1 text-xs min-w-[100px] lg:min-w-[180px] rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
               <Image src="/base.svg" alt={"base"} width={24} height={24} />
               <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
             </li>
