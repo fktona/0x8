@@ -143,7 +143,7 @@ const TradeBox = ({
                       ? item.tokenInAddress
                       : item.tokenOutAddress
                   }
-                  chain={chain}
+                  chain={item.chain}
                 >
                   <div className="flex items-center gap-1">
                     <Image
