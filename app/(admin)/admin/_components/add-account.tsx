@@ -319,8 +319,9 @@ export default function AddAccountPage() {
 
             {state.success && (
               <div
-                className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+                className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative animate-fadeIn"
                 role="alert"
+                style={{ animation: "fadeIn 0.3s, fadeOut 0.5s 5s forwards" }}
               >
                 <span className="block sm:inline">{state.message}</span>
               </div>
