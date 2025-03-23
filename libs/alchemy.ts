@@ -4,7 +4,6 @@ import { Alchemy, Network, AssetTransfersCategory } from "alchemy-sdk";
 import Moralis from "moralis";
 import { ethers } from "ethers";
 
-// Initialize Alchemy SDK
 const alchemy = new Alchemy({
   apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
   network: Network.ETH_MAINNET,
