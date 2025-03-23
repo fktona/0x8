@@ -105,7 +105,7 @@ const TradeBox = ({
               className="flex w-full justify-between items-center py-[10px]"
               key={index}
             >
-              <div className="flex w-full flex-wrap justify-start  items-center gap-[6px] text-white/80 font-light">
+              <div className="flex w-full flex-wrap justify-start 2xl:justify-between  items-center gap-[6px] text-white/80 font-light">
                 <ProfileLink walletAddress={item.wallet}>
                   <Image
                     src={item.imageUrl || "/placeholder.svg"}
@@ -339,7 +339,7 @@ function Trade() {
           </button>
         </Link>
       </div>
-      <div className="flex flex-col  md:flex-row gap-4 w-full bg-black ">
+      <div className="flex flex-col   md:flex-row gap-4 w-full bg-black ">
         <TradeBox
           chain="eth"
           loading={isLoading}
