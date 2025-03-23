@@ -91,6 +91,7 @@ export default function EditAccountPage({
       </button>
 
       {/* Main Content */}
+
       <div className="flex-grow flex flex-col items-center px-4 py-6">
         <div className="w-full max-w-md">
           <h1 className="text-[24px] lg:text-[38px] font-bold font-aktiv-bold text-center mb-10">
