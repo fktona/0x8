@@ -34,7 +34,7 @@ export default function TradeItem({
         <Image
           src={
             (type === "buy" ? tokenInLogo : tokenOutLogo) ||
-            (chain ? `/${chain}.svg` : "/default.svg")
+            (chain ? `/${chain.toLowerCase()}.svg` : "/default.svg")
           }
           alt={(type == "buy" ? tokenInSymbol : tokenOutSymbol) || "logo"}
           width={20}
@@ -51,7 +51,7 @@ export default function TradeItem({
         <Image
           src={
             (type === "buy" ? tokenOutLogo : tokenInLogo) ||
-            (chain ? `/${chain}.svg` : "/default.svg")
+            (chain ? `/${chain.toLowerCase()}.svg` : "/default.svg")
           }
           alt={"BNB"}
           width={20}

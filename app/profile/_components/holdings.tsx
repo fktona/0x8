@@ -37,7 +37,7 @@ const TokenHolding: FC<TokenHoldingProps> = ({
     <div className="flex text-[14px] items-center justify-between p-3">
       <div className="flex items-center gap-2">
         <Image
-          src={logo?.tokenInLogo || `/${chain}.svg`}
+          src={logo?.tokenInLogo || `/${chain.toLowerCase()}.svg`}
           alt={"BNB"}
           width={20}
           height={20}

@@ -538,7 +538,7 @@ export default function TokensComponents() {
                 <span className="text-[16px] text-white/80">Low caps</span>
                 <div className="flex items-center gap-1">
                   <Image
-                    src={`${activeTab}.svg`}
+                    src={`${activeTab.toLocaleLowerCase()}.svg`}
                     alt={activeTab}
                     width={30}
                     height={30}
@@ -555,7 +555,7 @@ export default function TokensComponents() {
                 <span className="text-[16px] text-white/80">$100k+</span>
                 <div className="flex items-center gap-1">
                   <Image
-                    src={`${activeTab}.svg`}
+                    src={`${activeTab.toLocaleLowerCase()}.svg`}
                     alt={activeTab}
                     width={30}
                     height={30}
@@ -572,7 +572,7 @@ export default function TokensComponents() {
                 <span className="text-[16px] text-white/80">$1M+</span>
                 <div className="flex items-center gap-1">
                   <Image
-                    src={`${activeTab}.svg`}
+                    src={`${activeTab.toLocaleLowerCase()}.svg`}
                     alt={activeTab}
                     width={30}
                     height={30}
@@ -713,7 +713,7 @@ export default function TokensComponents() {
               <span className="text-[16px] text-white/80">Low caps</span>
               <div className="flex items-center gap-1">
                 <Image
-                  src={`${activeTab}.svg`}
+                  src={`${activeTab.toLocaleLowerCase()}.svg`}
                   alt={activeTab}
                   width={30}
                   height={30}
@@ -777,7 +777,7 @@ export default function TokensComponents() {
               <span className="text-[16px] text-white/80">$100k+</span>
               <div className="flex items-center gap-1">
                 <Image
-                  src={`${activeTab}.svg`}
+                  src={`${activeTab.toLocaleLowerCase()}.svg`}
                   alt={activeTab}
                   width={30}
                   height={30}
@@ -842,7 +842,7 @@ export default function TokensComponents() {
               <span className="text-[16px] text-white/80">$1M+</span>
               <div className="flex items-center gap-1">
                 <Image
-                  src={`${activeTab}.svg`}
+                  src={`${activeTab.toLocaleLowerCase()}.svg`}
                   alt={activeTab}
                   width={30}
                   height={30}
