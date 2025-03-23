@@ -9,7 +9,9 @@ function DexLink({
   tokenAddress: string;
   chain: string;
 }) {
-  const dexUrl = `https://dexscreener.com/${chain}/${tokenAddress}`;
+  const dexUrl = `https://dexscreener.com/${
+    chain == "eth" ? "ethereum" : chain
+  }/${tokenAddress}`;
 
   return (
     <a

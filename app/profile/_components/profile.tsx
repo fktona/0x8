@@ -438,7 +438,7 @@ export default function ProfilePage({
             {tokenPnl
               ?.filter((o) => o.totalSells != 0)
               ?.map((token, index) => (
-                <TokenPnlItem key={index} {...token} />
+                <TokenPnlItem key={index} {...token} activeTab={activeTab} />
               ))}
           </div>
         </div>

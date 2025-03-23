@@ -62,10 +62,12 @@ import { formatNumber, timeAgo } from "@/libs/utils";
 import type { TokenTradeSummary, TradeTransaction } from "@/types";
 import Image from "next/image";
 import { cn } from "@/libs/utils";
+import { useTransactionsStore } from "@/store/store";
 
 interface TokenPnlItemProps {
   symbol: string;
   transactions?: TradeTransaction[];
+  activeTab: string;
 }
 
 export default function TokenPnlItem({
@@ -80,26 +82,51 @@ export default function TokenPnlItem({
   totalTokenSold,
   totalTokenBoughtUSD,
   totalTokenSoldUSD,
-}: TokenTradeSummary) {
+  activeTab,
+}: TokenTradeSummary & { activeTab: string }) {
   // Format the amounts properly, handling negative values
 
-  const checkLoss = pnlPercentage < 0;
+  console.log({
+    tokenAddress,
 
-  function cn(arg0: string, arg1: string): string | undefined {
-    throw new Error("Function not implemented.");
-  }
+    tokenSymbol,
+    totalBuys,
+    totalSells,
+    pnlPercentage,
+    pnlUSD,
+    totalTokenBought,
+    totalTokenSold,
+    totalTokenBoughtUSD,
+    totalTokenSoldUSD,
+    activeTab,
+  });
+  const { transactions, isLoading, usersTransactions } = useTransactionsStore();
+  const logo = transactions.find((t) => t.tokenInAddress === tokenAddress);
+
+  const calPnlPercentage = parseFloat(
+    (
+      ((-1 * parseFloat(totalTokenSoldUSD) - parseFloat(totalTokenBoughtUSD)) /
+        parseFloat(totalTokenBoughtUSD)) *
+      100
+    ).toFixed(2)
+  );
+  const calPnlUSD =
+    -1 * parseFloat(totalTokenSoldUSD) - parseFloat(totalTokenBoughtUSD);
+
+  const checkLoss = calPnlUSD < 0 ? true : false;
 
   return (
     <div className="bg-[#1B1B1B] p-[10px] rounded-sm space-y-[13px]">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Image
-            src={"/ponki.svg"}
+            src={logo?.tokenInLogo || `/${activeTab?.toLowerCase()}.svg`}
             alt={"BNB"}
             width={20}
             height={20}
             className="rounded-full"
           />
+
           <span className="text-[14px] font-medium">{tokenSymbol}</span>
           {/* <span className="text-[14px] text-gray-400">MC: {marketCap}</span> */}
         </div>
@@ -111,9 +138,9 @@ export default function TokenPnlItem({
                 : "text-green-500 text-[14px]"
             }
           >
-            {formatNumber(pnlPercentage)}%
+            {calPnlPercentage}%
           </span>
-          <span className="">${formatNumber(pnlUSD)}</span>
+          <span className="">${formatNumber(calPnlUSD)}</span>
         </div>
       </div>
 
