@@ -1,5 +1,6 @@
 "use client";
 import ProfileLink from "@/components/profile-link";
+import { copyToClipboard } from "@/libs/utils";
 import { UserProfile } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -59,14 +60,21 @@ export default function AccountRow({ account, onDelete, index }: AccountProps) {
             )}
           </div>
 
-          <span className="text-gray-400 text-end truncate max-w-[150px] sm:max-w-none">
+          <span className="text-gray-400 text-end hidden lg:inline max-w-[150px] sm:max-w-none">
             {account.wallet}
           </span>
+
+          <button
+            onClick={() => copyToClipboard(account.wallet)}
+            className="text-gray-400 text-end hover:underline  lg:hidden max-w-[150px] sm:max-w-none"
+          >
+            {account.wallet.slice(0, 4)}...{account.wallet.slice(-3)}
+          </button>
         </div>
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
+      <div className="flex items-center justify-end lg:justify-items-start w-full lg:w-auto gap-4 flex-wrap">
         {/* Tokens */}
         <div className="flex items-center gap-2">
           {account?.chains?.includes("bsc") && (

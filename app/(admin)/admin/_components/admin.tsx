@@ -29,10 +29,9 @@ export default function AdminDashboardPage({
 
   // Pagination logic
   const totalPages = Math.ceil(users.length / itemsPerPage);
-  const paginatedUsers = filteredUsers.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const paginatedUsers = [...filteredUsers]
+    .sort((a, b) => a.wallet.localeCompare(b.wallet))
+    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {

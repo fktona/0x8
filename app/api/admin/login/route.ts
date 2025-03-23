@@ -6,8 +6,8 @@ export async function POST(request: Request) {
   const { username, password } = body;
 
   // Get admin credentials from environment variables
-  const adminUsername = process.env.ADMIN_USERNAME;
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminUsername = process.env.NEXT_PUBLIC_ADMIN_USERNAME;
+  const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
 
   // Validate credentials
   if (username === adminUsername && password === adminPassword) {

@@ -201,8 +201,25 @@ export default function ProfilePage({
 
               <div className="mt-[25px] relative">
                 <div className="flex font-aktiv-regular  items-center gap-[30px]">
-                  <h2 className="md:text-[32px] text-[20px]">
+                  <h2 className="md:text-[32px] truncate text-[20px]">
                     {profile?.name}
+                    <button
+                      className="flex lg:hidden items-center active:scale-90 opacity-75 md:text-[32px] text-[20px] justify-center gap-1"
+                      onClick={() => {
+                        navigator.clipboard
+                          .writeText(profile?.wallet || "")
+                          .then(() => {
+                            // Optional: Add visual feedback here in a full solution
+                            console.log("Copied wallet address");
+                          })
+                          .catch((err) =>
+                            console.error("Failed to copy: ", err)
+                          );
+                      }}
+                      title="Copy wallet address"
+                    >
+                      {profile?.wallet.slice(-6)} <Copy size={20} />
+                    </button>
                   </h2>
                   {profile?.twitter && (
                     <Image
@@ -224,7 +241,7 @@ export default function ProfilePage({
                     />
                   )}
                   <button
-                    className="flex items-center active:scale-90 opacity-75 md:text-[32px] text-[20px] justify-center gap-1"
+                    className="lg:flex hidden items-center active:scale-90 opacity-75 md:text-[32px] text-[20px] justify-center gap-1"
                     onClick={() => {
                       navigator.clipboard
                         .writeText(profile?.wallet || "")
@@ -241,76 +258,81 @@ export default function ProfilePage({
                 </div>
               </div>
             </div>
-            <div className="flex lg:text-[16px] text-[12px] lg:mt-[25px] font-aktiv-medium font-medium lg:gap-[31px] gap-2">
-              {profile?.chains && (
-                <button
-                  className={`px-[9px] lg:py-[10px] py-1.5 rounded-[10px]  flex items-center gap-1 ${
-                    activeTab === "BSC"
-                      ? "bg-white text-black"
-                      : "bg-transparent"
-                  }`}
-                  onClick={() => setActiveTab("BSC")}
-                >
-                  <Image
-                    src={"/bnb.svg"}
-                    alt={"BNB"}
-                    width={20}
-                    height={20}
-                    className="rounded-full"
-                  />
-                  BNB
-                </button>
-              )}
-
-              {profile?.chains && (
-                <button
-                  className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
-                    activeTab === "ETH"
-                      ? "bg-white text-black"
-                      : "bg-transparent"
-                  }`}
-                  onClick={() => setActiveTab("ETH")}
-                >
-                  <Image
-                    src={"/eth.svg"}
-                    alt={"BNB"}
-                    width={20}
-                    height={20}
-                    className="rounded-full"
-                  />
-                  ETH
-                </button>
-              )}
-              {profile?.chains && (
-                <button
-                  className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
-                    activeTab === "BASE"
-                      ? "bg-white text-black"
-                      : "bg-transparent"
-                  }`}
-                  onClick={() => setActiveTab("BASE")}
-                >
-                  <Image
-                    src={"/base.svg"}
-                    alt={"BNB"}
-                    width={20}
-                    height={20}
-                    className="rounded-full"
-                  />
-                  BASE
-                </button>
-              )}
-              {["1d", "3d", "7d", "14d", "30d"].map((period) => (
-                <button
-                  key={period}
-                  className={` px-[9px] lg:py-[10px] py-1.5 rounded-[10px] lg:hidden ${
-                    activePeriod === period ? "bg-white/25" : "bg-transparent"
-                  }`}
-                  onClick={() => setActivePeriod(period)}
-                >
-                  {period}
-                </button>
-              ))}
+            <div className="flex lg:text-[16px] flex-col lg:flex-row lg:w-auto w-full text-[12px] lg:mt-[25px] font-aktiv-medium font-medium lg:gap-[31px] gap-2">
+              <div className="flex items-center  justify-between lg:w-auto lg:justify-start w-full mb-4 lg:mb-0  gap-6">
+                {" "}
+                {profile?.chains && (
+                  <button
+                    className={`px-[9px] lg:py-[10px] py-1.5 rounded-[10px]  min-w-[80px] flex items-center gap-1 ${
+                      activeTab === "BSC"
+                        ? "bg-white text-black"
+                        : "bg-transprent"
+                    }`}
+                    onClick={() => setActiveTab("BSC")}
+                  >
+                    <Image
+                      src={"/bnb.svg"}
+                      alt={"BNB"}
+                      width={20}
+                      height={20}
+                      className="rounded-full"
+                    />
+                    BNB
+                  </button>
+                )}
+                {profile?.chains && (
+                  <button
+                    className={`px-[9px] py-[10px] rounded-[10px] min-w-[80px]  flex items-center gap-1 ${
+                      activeTab === "ETH"
+                        ? "bg-white text-black"
+                        : "bg-transparent"
+                    }`}
+                    onClick={() => setActiveTab("ETH")}
+                  >
+                    <Image
+                      src={"/eth.svg"}
+                      alt={"BNB"}
+                      width={20}
+                      height={20}
+                      className="rounded-full"
+                    />
+                    ETH
+                  </button>
+                )}
+                {profile?.chains && (
+                  <button
+                    className={`px-[9px] py-[10px] rounded-[10px] min-w-[80px]  flex items-center gap-1 ${
+                      activeTab === "BASE"
+                        ? "bg-white text-black"
+                        : "bg-transparent"
+                    }`}
+                    onClick={() => setActiveTab("BASE")}
+                  >
+                    <Image
+                      src={"/base.svg"}
+                      alt={"BNB"}
+                      width={20}
+                      height={20}
+                      className="rounded-full"
+                    />
+                    BASE
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center  justify-between w-full mb-4 lg:mb-0  gap-2">
+                {" "}
+                {["1d", "3d", "7d", "14d", "30d"].map((period) => (
+                  <button
+                    key={period}
+                    className={` px-[9px] lg:py-[10px] py-1.5 rounded-[10px] lg:hidden ${
+                      activePeriod === period ? "bg-white/25" : "bg-transparent"
+                    }`}
+                    onClick={() => setActivePeriod(period)}
+                  >
+                    {period}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Token Filters */}

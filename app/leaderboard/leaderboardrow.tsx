@@ -100,8 +100,12 @@ export default function LeaderboardRow({
               </a>
             )}
           </div>
-
-          <span className="text-[16px]   lg:ml-[40px]">{data.wallet}</span>
+          <span className="text-[16px] lg:ml-[40px]">
+            <span className="lg:hidden">
+              {data.wallet.slice(0, 7)}...{data.wallet.slice(-6)}
+            </span>
+            <span className="hidden lg:inline">{data.wallet}</span>
+          </span>
         </div>
       </div>
 
