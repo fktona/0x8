@@ -1,5 +1,5 @@
 import ProfileLink from "@/components/profile-link";
-import { formatNumber } from "@/libs/utils";
+import { formatNumber, formatNumber2 } from "@/libs/utils";
 import { LeaderBoard } from "@/types";
 import Image from "next/image";
 interface LeaderboardRowProps {
@@ -124,7 +124,13 @@ export default function LeaderboardRow({
               : "text-red-500 text-[16px]"
           }
         >
-          {formatNumber(data.pnlSummary.totalBuys)} {activeTab}
+          <span className="hidden  lg:inline">
+            {formatNumber2(data.pnlSummary.totalBuys.toString())} {activeTab}
+          </span>
+
+          <span className="lg:hidden">
+            {formatNumber2(data.pnlSummary.totalBuys.toString())} {activeTab}
+          </span>
         </div>
 
         <div className="flex items-center gap-1">
@@ -142,8 +148,11 @@ export default function LeaderboardRow({
               stroke-linejoin="round"
             />
           </svg>
-          <span className="text-[16px] text-white/80">
-            ${formatNumber(data.pnlSummary.totalPnlUSD)}
+          <span className="text-[16px] hidden lg:inline text-white/80">
+            ${formatNumber2(data.pnlSummary.totalPnlUSD)}
+          </span>
+          <span className="text-[16px] lg:hidden text-white/80">
+            ${formatNumber2(data.pnlSummary.totalPnlUSD)}
           </span>
         </div>
       </div>

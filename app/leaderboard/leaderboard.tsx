@@ -8,7 +8,7 @@ import type { LeaderBoard } from "@/types";
 import { useTransition } from "react";
 
 export default function LeaderboardPage() {
-  const [activeTab, setActiveTab] = useState("BSC");
+  const [activeTab, setActiveTab] = useState("ETH");
   const [error, setError] = useState<string | null>(null);
   const [boardData, setBoardData] = useState<LeaderBoard[]>([]);
   const [isPending, startTransition] = useTransition();
