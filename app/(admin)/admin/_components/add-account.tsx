@@ -61,7 +61,7 @@ export default function AddAccountPage() {
     if (state.success) {
       // Wait a moment to show success message before redirecting
       const timer = setTimeout(() => {
-        // router.push("/admin/dashboard");
+        router.push("/admin");
       }, 1500);
 
       return () => clearTimeout(timer);

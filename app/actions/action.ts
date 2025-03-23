@@ -1,5 +1,5 @@
 // "use server";
-// import { revalidatePath } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -136,6 +136,8 @@ export async function addAccount(
       throw new Error("Failed to add account");
     }
 
+    revalidatePath("/admin");
+
     return {
       success: true,
       message: "Account added successfully!",
@@ -270,6 +272,8 @@ export async function EditAccount(
       throw new Error("Failed to add account");
     }
 
+    revalidatePath("/admin");
+
     return {
       success: true,
       message: "Account added successfully!",
@@ -307,7 +311,7 @@ export async function deleteAccount(wallet: string): Promise<AccountFormState> {
       throw new Error("Failed to delete account");
     }
 
-    // revalidatePath("/admin");
+    revalidatePath("/admin");
 
     return {
       success: true,
