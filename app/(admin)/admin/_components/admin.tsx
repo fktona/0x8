@@ -18,10 +18,18 @@ export default function AdminDashboardPage({
   const itemsPerPage = 5; // Change as needed
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [filteredUsers, setFilteredUsers] = useState<UserProfile[]>(users);
+
+  const handleSearch = (query: string) => {
+    const filtered = users.filter((user) =>
+      user.wallet.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  };
 
   // Pagination logic
   const totalPages = Math.ceil(users.length / itemsPerPage);
-  const paginatedUsers = users.slice(
+  const paginatedUsers = filteredUsers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -57,11 +65,11 @@ export default function AdminDashboardPage({
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       {/* Gradient Background */}
-      <div className="flex-grow flex flex-col gap-5 relative">
+      <div className="flex-grow flex flex-col gap-5 relative ">
         <div className="w-full inset-0  bgg2 z-0 h-[191px] flex items-center justify-center">
           <h1 className="font-aktiv-bold font-bold text-[63px]">ADMIN</h1>
         </div>
-        <div className="flex-grow z-10 px-4 pb-8">
+        <div className="flex-grow z-10 p pb-8 lg:px-[80px] px-4">
           <div className="flex lg:items-center flex-col gap-4 lg:flex-row justify-between mb-6">
             <div className="flex items-center gap-4">
               <h2 className="lg:text-[34px] text-[24px] font-aktiv-regular font-medium ">
@@ -77,6 +85,11 @@ export default function AdminDashboardPage({
                 <input
                   type="text"
                   placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    handleSearch(e.target.value);
+                  }}
                   className="flex lg:w-[538px] w-full h-[38px] p-[10px] flex-col justify-center items-center gap-[10px] rounded-[80px] bg-[rgba(12,12,12,0.93)]"
                 />
 
@@ -123,43 +136,45 @@ export default function AdminDashboardPage({
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-end items-center gap-2 mt-6">
-            <button
-              className={`px-3 py-1 rounded-md font-medium ${
-                currentPage === 1
-                  ? "bg-gray-700 cursor-not-allowed"
-                  : "bg-gray-800"
-              }`}
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Prev
-            </button>
-
-            {[...Array(totalPages)].map((_, i) => (
+          {filteredUsers.length > 5 && (
+            <div className="flex justify-end items-center gap-2 mt-6">
               <button
-                key={i}
-                className={`px-3 py-1 rounded-md ${
-                  currentPage === i + 1 ? "bg-gray-800" : ""
+                className={`px-3 py-1 rounded-md font-medium ${
+                  currentPage === 1
+                    ? "bg-gray-700 cursor-not-allowed"
+                    : "bg-gray-800"
                 }`}
-                onClick={() => handlePageChange(i + 1)}
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
               >
-                {i + 1}
+                Prev
               </button>
-            ))}
 
-            <button
-              className={`px-3 py-1 rounded-md font-medium ${
-                currentPage === totalPages
-                  ? "bg-gray-700 cursor-not-allowed"
-                  : "bg-gray-800"
-              }`}
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i}
+                  className={`px-3 py-1 rounded-md ${
+                    currentPage === i + 1 ? "bg-gray-800" : ""
+                  }`}
+                  onClick={() => handlePageChange(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button
+                className={`px-3 py-1 rounded-md font-medium ${
+                  currentPage === totalPages
+                    ? "bg-gray-700 cursor-not-allowed"
+                    : "bg-gray-800"
+                }`}
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
           {
             // Show error or success message
             error && (

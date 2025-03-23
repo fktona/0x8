@@ -5,18 +5,24 @@ import Image from "next/image";
 import TradesList from "./trade-list";
 import { AlTransactionsProps } from "@/types";
 import { useTransactionsStore } from "@/store/store";
-export default function TradeComponents({
-  allTransactions,
-}: {
-  allTransactions: AlTransactionsProps[];
-}) {
+export default function TradeComponents({}: {}) {
   const [activeTab, setActiveTab] = useState("All");
 
   const { usersTransactions } = useTransactionsStore();
 
+  const [filteredUsers, setFilteredUsers] = useState<
+    AlTransactionsProps[] | null
+  >(usersTransactions);
+
+  const handleSearch = (query: string) => {
+    const filtered = usersTransactions?.filter((user) =>
+      user.wallet.toLowerCase()?.includes(query?.toLowerCase())
+    );
+    setFilteredUsers(filtered || []);
+  };
+
   return (
     <div className=" bg-black text-white">
-      {/* Realtime Trades Section */}
       <div className="p-4 lg:py-[38px] py-[20px]">
         <div className="flex lg:items-center lg:gap-2 mb-4 flex-col lg:flex-row gap-[28px]">
           <h4 className="flex  items-center text-[20px] font-aktiv-bold font-bold lg:justify-between gap-2">
@@ -83,6 +89,7 @@ export default function TradeComponents({
             <input
               type="text"
               placeholder="Enter wallet address"
+              onChange={(e) => handleSearch(e.target.value)}
               className="flex lg:w-[538px] w-full h-[49px] p-[10px] flex-col justify-center items-center gap-[10px] rounded-[80px] bg-[rgba(12,12,12,0.93)]"
             />
 
@@ -94,51 +101,19 @@ export default function TradeComponents({
               className="absolute right-[20px] top-[20px]"
             />
           </div>
-          {/* 
-          <button className="flex items-center gap-1 text-sm">
-            <span>Filter Wallets</span>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6 9L12 15L18 9"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button> */}
         </div>
 
-        {/* Trades Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {
-            // Filter trades based on active tab
-            allTransactions
-              .filter((trade) => {
-                if (activeTab === "All") return trade;
-                return trade.transactions[0].chain === activeTab.toLowerCase();
-              })
-              .map((trade, index) => (
-                <TradesList key={index} trades={trade} />
-              ))
-          }
+          {filteredUsers
+            ?.filter((trade) => {
+              if (activeTab === "All") return trade;
+              return trade.transactions[0].chain === activeTab.toLowerCase();
+            })
+            .map((trade, index) => (
+              <TradesList key={index} trades={trade} />
+            ))}
         </div>
       </div>
-
-      {/* Footer */}
-      {/* <footer className="p-4 border-t border-white/10 flex justify-between text-xs text-gray-400">
-        <div>© 2025 0xscan. All rights reserved.</div>
-        <div className="flex gap-4">
-          <a href="#">Privacy</a>
-          <a href="#">Terms of Use</a>
-        </div>
-      </footer> */}
     </div>
   );
 }

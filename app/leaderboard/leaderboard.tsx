@@ -28,6 +28,8 @@ export default function LeaderboardPage() {
       } catch (error) {
         console.error("Error fetching leaderboard data", error);
         setError("Failed to load leaderboard data. Please try again later.");
+      } finally {
+        console.log("finally");
       }
     });
   }, [activeTab]);
@@ -40,7 +42,7 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <div className="min-h-screen max-w-[960px] mx-auto bg-black text-white">
+    <div className="min-h-screen max-w-[1200px] mx-auto bg-black text-white">
       {/* Leaderboard Section */}
       <div className="p-4 ">
         <div className="flex lg:items-center lg:gap-2 mb-4 flex-col lg:flex-row   ">
@@ -120,7 +122,9 @@ export default function LeaderboardPage() {
               ))
             : Array(15)
                 .fill(null)
-                .map((_, index) => <LeaderboardRowSkeleton key={index} />)}
+                .map((_, index) =>
+                  !error ? <LeaderboardRowSkeleton key={index} /> : null
+                )}
         </div>
       </div>
     </div>

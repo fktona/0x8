@@ -102,3 +102,31 @@ export interface TransactionEvent {
 export type GroupedTransactions = {
   [tokenOutSymbol: string]: TradeTransaction[]; // Groups by tokenOutSymbol, and each group contains an array of transactions
 };
+
+export type TokenMetaData = {
+  status: "success" | "error";
+  data: {
+    address: string;
+    name: string;
+    symbol: string;
+    TokenPrice: string;
+    marketCap: string;
+    price_change_percentage: number;
+  };
+  timestamp: string;
+};
+
+export type TokenTradeSummary = {
+  tokenAddress: string;
+  tokenName: string;
+  tokenSymbol: string;
+  tradeCount: number;
+  totalBuys: number;
+  totalSells: number;
+  totalTokenBought: string;
+  totalTokenBoughtUSD: string;
+  totalTokenSold: string;
+  totalTokenSoldUSD: string;
+  pnlUSD: string;
+  pnlPercentage: number;
+};

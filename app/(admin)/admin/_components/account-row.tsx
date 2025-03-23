@@ -14,9 +14,9 @@ export default function AccountRow({ account, onDelete, index }: AccountProps) {
   return (
     <div className="flex flex-wrap items-center justify-between p-3 text-sm md:text-[18px] text-white/80 rounded-lg bg-black border border-white/10 gap-y-2">
       {/* Left Section */}
-      <div className="flex items-center min-w-[50%] justify-between relative   gap-3 flex-wrap">
-        <div className="flex items-center gap-2 text-start justify-between w-full flex-wrap">
-          <div className="w-6 text-center font-medium">{index + 1}</div>
+      <div className="flex items-center min-w-[50%] justify-between relative   gap-6 flex-wrap">
+        <div className="flex items-center gap-2 text-start justify-start w-full flex-wrap">
+          <div className="w-6  text-center font-medium">{index + 1}</div>
           <ProfileLink walletAddress={account.wallet}>
             <Image
               src={account?.imageUrl || "/profile-placeholder.svg"}
@@ -26,38 +26,40 @@ export default function AccountRow({ account, onDelete, index }: AccountProps) {
               className="rounded-full"
             />
           </ProfileLink>
-          <span className="font-medium">
+          <span className="font-medium w-[80px]">
             {account.name.length > 7
               ? `${account.name.substring(0, 7)}...`
               : account.name}
           </span>
 
-          {account.twitter && (
-            <a
-              href={`https://x.com/${account.twitter}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Image src={"/x.svg"} alt="X" width={24} height={24} />
-            </a>
-          )}
+          <div className="min-w-[10px]  flex  mx-4 items-center justify-center gap-2">
+            {account.twitter && (
+              <a
+                href={`https://x.com/${account.twitter}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Image src={"/x.svg"} alt="X" width={24} height={24} />
+              </a>
+            )}
 
-          {account.telegram && (
-            <a
-              href={`https://t.me/${account.telegram}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Image
-                src={"/telegram.svg"}
-                alt="Telegram"
-                width={28}
-                height={28}
-              />
-            </a>
-          )}
+            {account.telegram && (
+              <a
+                href={`https://t.me/${account.telegram}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Image
+                  src={"/telegram.svg"}
+                  alt="Telegram"
+                  width={28}
+                  height={28}
+                />
+              </a>
+            )}
+          </div>
 
-          <span className="text-gray-400 truncate max-w-[150px] sm:max-w-none">
+          <span className="text-gray-400 text-end truncate max-w-[150px] sm:max-w-none">
             {account.wallet}
           </span>
         </div>

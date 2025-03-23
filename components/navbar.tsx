@@ -57,17 +57,19 @@ function Navbar() {
         </div>
         <ul className="flex gap-4 items-center">
           {["/trades", "/tokens", "/leaderboard"].map((route, index) => (
-            <li
-              key={index}
-              className={cn(
-                "text-[18px] px-4 py-2 rounded-full uppercase",
-                path === route
-                  ? "bg-[#6E88EC] text-black"
-                  : "hover:bg-[#6E88EC]/40"
-              )}
-            >
-              <Link href={route}>{route.replace("/", "")}</Link>
-            </li>
+            <Link href={route}>
+              <li
+                key={index}
+                className={cn(
+                  "text-[18px] px-4 py-2 rounded-full uppercase",
+                  path === route
+                    ? "bg-[#6E88EC] text-black"
+                    : "hover:bg-[#6E88EC]/40"
+                )}
+              >
+                {route.replace("/", "")}
+              </li>
+            </Link>
           ))}
           <svg
             xmlns="http://www.w3.org/2000/svg"

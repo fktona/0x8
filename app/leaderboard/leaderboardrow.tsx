@@ -31,7 +31,7 @@ export default function LeaderboardRow({
 
   return (
     <div
-      className={`flex items-center flex-wrap gap-3.5 justify-between p-3 border border-[#1F1F1F] text-white/80 rounded-[13px] ${bgColor}`}
+      className={`flex items-center flex-wrap lg:flex-nowrap gap-3.5 justify-between p-3 border border-[#1F1F1F] text-white/80 rounded-[13px] ${bgColor}`}
     >
       <div className="flex items-center gap-3">
         <div className="w-6 text-center font-medium">
@@ -69,21 +69,37 @@ export default function LeaderboardRow({
               className="rounded-full"
             />
           </ProfileLink>
-          <span className="text-[16px]  font-medium">{data.name}</span>
-          <Image
-            src={"/x.svg"}
-            alt={"X"}
-            width={14}
-            height={14}
-            className="rounded-full"
-          />
-          <Image
-            src={"/telegram.svg"}
-            alt={"X"}
-            width={16}
-            height={16}
-            className="rounded-full"
-          />
+          <span className="text-[16px] lg:w-[60px] mr-8  font-medium">
+            {data.name}
+          </span>
+
+          <div className="flex lg:min-w-[40px]  items-center justify-start my-4 gap-3">
+            {data.twitter && (
+              <a
+                href={`https://x.com/${data.twitter}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Image src={"/x.svg"} alt={"X"} width={16} height={16} />
+              </a>
+            )}
+
+            {data.telegram && (
+              <a
+                href={`https://t.me/${data.telegram}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Image
+                  src={"/telegram.svg"}
+                  alt={"X"}
+                  width={16}
+                  height={16}
+                  className="rounded-full"
+                />
+              </a>
+            )}
+          </div>
 
           <span className="text-[16px]   lg:ml-[40px]">{data.wallet}</span>
         </div>

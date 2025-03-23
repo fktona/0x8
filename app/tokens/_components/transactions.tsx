@@ -1,24 +1,22 @@
-import ProfileLink from "@/components/profile-link";
 import { formatNumber, timeAgo } from "@/libs/utils";
+import { TokenPanelProps } from "./tokens";
 import Image from "next/image";
-
-interface TokenTransactionProps {
-  trader: string;
-  bought: string;
-  got: string;
-  time: string;
-  imageUrl: string;
-  wallet: string;
-}
+import Profile from "@/app/profile/[id]/page";
+import ProfileLink from "@/components/profile-link";
 
 export default function TokenTransaction({
-  trader,
-  bought,
-  got,
-  time,
+  name,
+  tokenOutAmount,
+  tokenOutMetadata,
+  tokenInMetadata,
+  tokenInAmount,
+  tokenInSymbol,
+  tokenOutSymbol,
+  tokenOutAmountUsd,
+  blockTimestamp,
   imageUrl,
   wallet,
-}: TokenTransactionProps) {
+}: TokenPanelProps) {
   return (
     <div className="grid grid-cols-4 text-xs p-2">
       <div className="flex items-center gap-1">
@@ -26,16 +24,22 @@ export default function TokenTransaction({
           <Image
             src={imageUrl || "/profile-placeholder.svg"}
             alt={"BNB"}
-            width={30}
-            height={30}
+            width={20}
+            height={20}
             className="rounded-full"
           />
         </ProfileLink>
-        <span>{trader}</span>
+        <span>{name}</span>
       </div>
-      <div className="text-yellow-500">{formatNumber(bought)} USD</div>
-      <div className="text-yellow-500">{formatNumber(got)}</div>
-      <div className="text-gray-400">{timeAgo(time)}</div>
+      <div className="text-white">
+        {formatNumber(tokenOutAmount)}{" "}
+        <span className="text-yellow-500">{tokenOutSymbol}</span>{" "}
+      </div>
+      <div className="text-yellow-500">
+        {formatNumber(tokenInAmount)}{" "}
+        {/* <span className="text-yellow-500">{tokenInMetadata?.data.symbol}</span> */}
+      </div>
+      <div className="text-gray-400">{timeAgo(blockTimestamp)}</div>
     </div>
   );
 }

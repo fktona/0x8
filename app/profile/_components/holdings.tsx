@@ -2,14 +2,26 @@ import { formatNumber2 } from "@/libs/utils";
 import { TokenHoldings } from "@/types";
 import Image from "next/image";
 import { FC } from "react";
+import { useTransactionsStore } from "@/store/store";
+import { tr } from "framer-motion/client";
 
 interface TokenHoldingProps {
+  chain: string;
   data?: TokenHoldings;
   loading?: boolean;
 }
 
-const TokenHolding: FC<TokenHoldingProps> = ({ data, loading = false }) => {
-  if (loading) {
+const TokenHolding: FC<TokenHoldingProps> = ({
+  data,
+  loading = false,
+  chain,
+}) => {
+  const { transactions, isLoading, usersTransactions } = useTransactionsStore();
+  const logo = transactions.find(
+    (t) => t.tokenInAddress === data?.tokenAddress
+  );
+  console.log(usersTransactions);
+  if (loading || isLoading) {
     return (
       <div className="flex text-[14px] items-center justify-between p-3">
         <div className="flex items-center gap-2">
@@ -25,7 +37,7 @@ const TokenHolding: FC<TokenHoldingProps> = ({ data, loading = false }) => {
     <div className="flex text-[14px] items-center justify-between p-3">
       <div className="flex items-center gap-2">
         <Image
-          src={"/bnb.svg"}
+          src={logo?.tokenInLogo || `/${chain}.svg`}
           alt={"BNB"}
           width={20}
           height={20}

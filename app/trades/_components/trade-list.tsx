@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import ProfileLink from "@/components/profile-link";
 import { AlTransactionsProps, TradeTransaction } from "@/types";
-import { cn, formatNumber, timeAgo } from "@/libs/utils";
+import { cn, copyToClipboard, formatNumber, timeAgo } from "@/libs/utils";
 
 interface TradeProps {
   trades: AlTransactionsProps;
@@ -59,9 +59,12 @@ export default function TradesList({ trades }: TradeProps) {
         </div>
 
         <div className="ml-auto flex items-center gap-1">
-          <span className="text-sm">
+          <button
+            onClick={() => copyToClipboard(trades?.wallet)}
+            className="text-sm"
+          >
             {trades.wallet.slice(0, 5)}***{trades.wallet.slice(-5)}
-          </span>
+          </button>
           {trades.transactions[0].chain === "bsc" && (
             <Image
               src={"/bnb.svg"}
@@ -120,7 +123,7 @@ export default function TradesList({ trades }: TradeProps) {
               } ${trade.chain}`}</span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center  w-[120px] gap-2">
               <span className="text-yellow-500">
                 {trade.type == "buy"
                   ? formatNumber(trade.tokenInAmountUsd)

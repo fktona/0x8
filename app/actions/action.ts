@@ -1,5 +1,6 @@
-"use server";
-import { revalidatePath } from "next/cache";
+// "use server";
+// import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 // Define validation schema
@@ -214,7 +215,7 @@ export async function EditAccount(
       wallet,
       twitter,
       telegram,
-      imageUrl: imageUrl || "",
+
       chains,
     });
 
@@ -306,7 +307,7 @@ export async function deleteAccount(wallet: string): Promise<AccountFormState> {
       throw new Error("Failed to delete account");
     }
 
-    revalidatePath("/admin");
+    // revalidatePath("/admin");
 
     return {
       success: true,
@@ -351,7 +352,9 @@ export async function getAllUsersTransactions() {
 export async function getLeaderBoard(chain: string) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}user/pnl-leaderboard?chain=${chain}`,
+      chain.toLocaleLowerCase() == "bsc"
+        ? `${process.env.NEXT_PUBLIC_API_URL}user/pnl-leaderboard-v2?chain=bsc`
+        : `  ${process.env.NEXT_PUBLIC_API_URL}user/pnl-leaderboard?chain=${chain}`,
       {
         method: "GET",
         next: {
@@ -458,5 +461,79 @@ export const TopInfo = async () => {
     console.error("Error fetching transactions:", error);
     return [];
   }
-  return [];
+};
+
+export const searchAccount = async (
+  prevState: any,
+  formData: FormData
+): Promise<any> => {
+  const wallet = formData.get("wallet") as string;
+
+  if (!wallet || wallet.trim() === "") {
+    throw new Error("Please enter a wallet address");
+  }
+
+  try {
+    const payload = {
+      wallet,
+      name: "Anon",
+      temporal: true,
+    };
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: {
+        tags: ["search"],
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      console.log(response);
+      throw new Error("error occured");
+    }
+
+    redirect(`/profile/${wallet}`);
+  } catch (error) {
+    console.error("Error adding account:", error);
+    throw error; // Re-throw to handle in the client component
+  }
+};
+
+export const getTokenMetadata = async (address: string, chain: string) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}tracker/${address}/token-metadata?chain=${chain}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      console.log(response);
+      const defaultData = {
+        status: "failed",
+        data: {
+          address: "0",
+          name: "",
+          symbol: "",
+          TokenPrice: "0",
+          marketCap: "0",
+          price_change_percentage: 0,
+        },
+        timestamp: "2025-03-22T22:39:32.084Z",
+      };
+      return defaultData;
+    }
+
+    const data = await response.json();
+    console.log("Token Metadata:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching token metadata:", error);
+    return null;
+  }
 };

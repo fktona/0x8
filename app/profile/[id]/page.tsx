@@ -22,6 +22,8 @@ async function Profile({ params }: Props) {
 
     const users: TradeTransaction[] = await response.json();
 
+    console.log(profile);
+
     return (
       <ProfilePage
         trades={users.slice(0, 50)}

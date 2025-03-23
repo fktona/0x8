@@ -13,16 +13,6 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 function SubmitButton() {
   const { pending } = useFormStatus();
 
-  {
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        const element = document.querySelector('[role="alert"]');
-        if (element) element.remove();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }, []);
-  }
-
   return (
     <button
       type="submit"
@@ -47,6 +37,13 @@ export default function AddAccountPage() {
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const element = document.querySelector('[role="alert"]');
+      if (element) element.remove();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const initialState: AccountFormState = {};
   const [state, formAction] = useActionState(addAccount, initialState);
@@ -80,7 +77,7 @@ export default function AddAccountPage() {
   };
 
   return (
-    <div className="text-white flex flex-col">
+    <div className="text-white flex flex-col lg:px-[80px] px-5">
       <button
         className="flex items-center gap-2 text-lg"
         onClick={() => router.back()}

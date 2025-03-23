@@ -49,7 +49,10 @@ export default function TradeItem({
       <div className="flex items-center gap-2">
         <span className="text-sm">{formatNumber(tokenOutAmountUsd)}</span>
         <Image
-          src={"/bnb.svg"}
+          src={
+            (type === "buy" ? tokenOutLogo : tokenInLogo) ||
+            (chain ? `/${chain}.svg` : "/default.svg")
+          }
           alt={"BNB"}
           width={20}
           height={20}

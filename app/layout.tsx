@@ -6,6 +6,7 @@ import Search from "@/components/search";
 import { aktive, aktivThin, aktiveBold, aktiveMedium } from "@/fonts/font";
 import Footer from "@/components/footer";
 import Initialize from "@/components/initialize";
+import { NavigationProgress } from "@/components/progress";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,6 +25,8 @@ export default function RootLayout({
       >
         <Navbar />
         <div className="lg:mt-[20px] mt-[27px]" />
+
+        <NavigationProgress />
         <Initialize>{children}</Initialize>
         <Footer />
       </body>

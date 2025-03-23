@@ -132,3 +132,20 @@ button {
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
+#nprogress .bar {
+  background: radial-gradient(
+    87.5% 87.5% at 50% 87.5%,
+    #e5f0eb 0%,
+    #2969ff 100%
+  ) !important;
+  box-shadow: 6px -4px 4px 0px rgba(0, 0, 0, 0.15) inset !important;
+  position: fixed;
+  z-index: 99999999 !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px !important;
+  background-size: 200% 200%;
+  animation: barAnimation 2s ease infinite;
+}

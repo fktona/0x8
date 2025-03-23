@@ -1,12 +1,14 @@
-import React from "react";
 import TradeComponents from "./_components/trade";
 import { getAllUsersTransactions } from "../actions/action";
 
 async function Trade() {
   try {
-    // Fetch transactions using server-side rendering
-    const allTransactions = await getAllUsersTransactions();
-    return <TradeComponents allTransactions={allTransactions} />;
+    // const allTransactions = await getAllUsersTransactions();
+    return (
+      <div className="w-full px-6 lg:px-[40px] min-h-svh">
+        <TradeComponents />
+      </div>
+    );
   } catch (error) {
     console.error("Failed to fetch transactions:", error);
 

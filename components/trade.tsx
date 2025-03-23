@@ -42,6 +42,7 @@ const userWallets = [
   },
 ];
 const TradeBox = ({
+  chain,
   loading,
   data,
 }: {
@@ -52,22 +53,23 @@ const TradeBox = ({
       })[]
     | undefined;
   loading: boolean;
+  chain: string;
 }) => {
   return (
-    <div className="border md:h-[390px] h-[320px]  border-white/10 rounded-[12px] py-[17px] md:px-[12px] px-[10px] bg-black/40 w-full">
+    <div className="border md:h-[390px] flex flex-col h-[320px]  border-white/10 rounded-[12px] py-[17px] md:px-[12px] px-[10px] bg-black/40 w-full">
       <div className="text-white/80 font-light w-full text-[11px] lg:text-[14px] flex justify-between items-center pb-[17px] border-b border-white/10">
-        <h4 className="flex items-center text-[14px] lg:text-[16px]  lg:gap-2 gap-1 w-full  justify-between">
+        <h4 className="flex items-center capitalize text-[14px] lg:text-[16px]  lg:gap-2 gap-1 w-full  justify-between">
           Recent trades
-          <div className="flex items-cente  text-[11px] lg:text-[14px] gap-1">
+          <div className="flex items-center  text-[11px] lg:text-[14px] gap-1">
             {" "}
             <Image
-              src={`${data?.[0]?.chain || "/eth"}.svg`}
-              alt={data?.[0]?.name || ""}
+              src={`${chain}.svg`}
+              alt={chain}
               width={30}
               height={30}
-              className="mr-1 rounded-full w-[16px] h-[16px] lg:h-[30px] lg:w-[30px]"
+              className="mr-1 rounded-full uppercase w-[16px] h-[16px] lg:h-[30px] lg:w-[30px]"
             />
-            <span>{data?.[0]?.chain?.toUpperCase() || ""}</span>
+            <span className=" uppercase">{chain}</span>
           </div>
         </h4>
       </div>
@@ -186,10 +188,6 @@ function Trade() {
     console.log("usersTransactionsee", usersTransactions);
   }, [usersTransactions, txx]);
 
-  console.log("kkkk", usersTransactions);
-  if (isLoading) {
-    return null;
-  }
   // useEffect(() => {
   //   async function fetchTransactions() {
   //     setLoading(true);
@@ -333,6 +331,7 @@ function Trade() {
       </div>
       <div className="flex flex-col  md:flex-row gap-4 w-full bg-black ">
         <TradeBox
+          chain="eth"
           loading={isLoading}
           data={
             bscTx as (TradeTransaction & {
@@ -342,6 +341,7 @@ function Trade() {
           }
         />
         <TradeBox
+          chain="bsc"
           loading={isLoading}
           data={
             ethTx as (TradeTransaction & {
@@ -352,6 +352,7 @@ function Trade() {
         />
 
         <TradeBox
+          chain="base"
           loading={isLoading}
           data={
             baseTx as (TradeTransaction & {

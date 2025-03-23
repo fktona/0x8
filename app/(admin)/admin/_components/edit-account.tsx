@@ -66,7 +66,7 @@ export default function EditAccountPage({
     if (state.success) {
       // Wait a moment to show success message before redirecting
       const timer = setTimeout(() => {
-        router.push("/admin/dashboard");
+        router.push("/admin");
       }, 1500);
 
       return () => clearTimeout(timer);
@@ -82,7 +82,7 @@ export default function EditAccountPage({
   };
 
   return (
-    <div className="text-white flex flex-col">
+    <div className="text-white flex flex-col lg:px-[80px] px-5">
       <button
         className="flex items-center gap-2 text-lg"
         onClick={() => router.back()}

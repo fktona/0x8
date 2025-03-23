@@ -6,9 +6,14 @@ import TradeItem from "./item";
 import TokenHolding from "./holdings";
 import TokenPnlItem from "./pnl";
 import Image from "next/image";
-import { TokenHoldings, TradeTransaction, UserProfile } from "@/types";
+import type {
+  TokenHoldings,
+  TokenTradeSummary,
+  TradeTransaction,
+  UserProfile,
+} from "@/types";
 import { formatNumber2, groupTransactionsByTokenPair } from "@/libs/utils";
-import { Copy } from "lucide-react";
+import { ArrowLeft, Copy } from "lucide-react";
 import { getUserPnl, getUserTokenHoldings } from "@/app/actions/action";
 
 export default function ProfilePage({
@@ -20,8 +25,9 @@ export default function ProfilePage({
 }) {
   const router = useRouter();
   const [activePeriod, setActivePeriod] = useState("1d");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState(profile?.chains[0].toUpperCase());
+  const [activeTab, setActiveTab] = useState(
+    trades[0]?.chain.toLocaleUpperCase() || "BSC"
+  );
   const [holdings, setHoldings] = useState<TokenHoldings[]>([]);
 
   const combinedAddresses = [
@@ -36,35 +42,44 @@ export default function ProfilePage({
     return tokens.reduce((total, token) => total + token.tokenBalanceUSD, 0);
   }
 
-  console.log(combinedAddresses);
+  console.log(trades, "trades");
 
   const groupTrade = groupTransactionsByTokenPair(trades);
 
   console.log(groupTrade);
+  const [pnlIsLoading, setPnlIsLoading] = useState(false);
+  const [tokenPnl, setTokenPnl] = useState<TokenTradeSummary[] | null>(null);
 
-  const fetchTokenPnl = async () => {
-    const tokenspnl = await getUserPnl({
-      wallet: trades[0].wallet,
-      chain: activeTab,
-      tokens: combinedAddresses.slice(0, 5),
-    });
-    console.log(tokenspnl, "tokenspnl");
-    // setHoldings(tokenHoldings);
+  const fetchTokenPnl = async (addresses: string[]) => {
+    setPnlIsLoading(true);
+    try {
+      const tokenspnl = await getUserPnl({
+        wallet: profile.wallet,
+        chain: activeTab,
+        tokens: combinedAddresses,
+      });
+      console.log(tokenspnl, "tokenspnl");
+      setTokenPnl(tokenspnl);
 
-    return tokenspnl;
+      return tokenspnl;
+    } catch (error) {
+      console.error("Error fetching token PNL:", error);
+      return null;
+    } finally {
+      setPnlIsLoading(false);
+    }
   };
-
   const [holdingisLoading, setholdingIsLoading] = useState(false);
 
   const fetchTokenHoldings = async () => {
     setholdingIsLoading(true);
     try {
       const tokenHoldings = await getUserTokenHoldings({
-        wallet: trades[0].wallet,
+        wallet: profile.wallet,
         chain: activeTab,
       });
       console.log(tokenHoldings, "tokenspnl");
-      setHoldings(tokenHoldings);
+      setHoldings([...tokenHoldings, ...holdings]);
     } catch (error) {
       console.error("Error fetching token holdings:", error);
     } finally {
@@ -72,10 +87,43 @@ export default function ProfilePage({
     }
   };
 
+  const filterTradesByPeriod = (trades: TradeTransaction[], period: string) => {
+    const now = new Date();
+    const cutoffDate = new Date();
+
+    switch (period) {
+      case "1d":
+        cutoffDate.setDate(now.getDate() - 1);
+        break;
+      case "3d":
+        cutoffDate.setDate(now.getDate() - 3);
+        break;
+      case "7d":
+        cutoffDate.setDate(now.getDate() - 7);
+        break;
+      case "14d":
+        cutoffDate.setDate(now.getDate() - 14);
+        break;
+      case "30d":
+        cutoffDate.setDate(now.getDate() - 30);
+        break;
+      default:
+        cutoffDate.setDate(now.getDate() - 1);
+    }
+
+    return trades.filter((trade) => {
+      const tradeDate = new Date(trade.blockTimestamp);
+      return tradeDate >= cutoffDate;
+    });
+  };
+
   useEffect(() => {
+    fetchTokenPnl(combinedAddresses);
     fetchTokenHoldings();
-    fetchTokenPnl();
-  }, [activeTab]);
+  }, [activeTab, activePeriod]);
+
+  const filteredTrades = filterTradesByPeriod(trades, activePeriod);
+  const filteredGroupTrade = groupTransactionsByTokenPair(filteredTrades);
 
   return (
     <div className="min-h-screen  text-white flex flex-col">
@@ -87,7 +135,7 @@ export default function ProfilePage({
               className="flex text-[31px] items-center gap-2 text-lg"
               onClick={() => router.back()}
             >
-              Profile
+              <ArrowLeft className="my-4" /> Profile
             </button>
 
             <div className="flex items-center gap-3">
@@ -121,15 +169,15 @@ export default function ProfilePage({
                   <path
                     d="M13.8127 4.125L10.3943 7.5434C10.2732 7.66447 10.1089 7.73249 9.93766 7.73249C9.76641 7.73249 9.60217 7.66447 9.48106 7.5434L8.45677 6.5191C8.33566 6.39803 8.17141 6.33001 8.00016 6.33001C7.82891 6.33001 7.66467 6.39803 7.54356 6.5191L4.771 9.29167"
                     stroke="white"
-                    stroke-width="1.29167"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.29167"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                   <path
                     d="M2.1875 2.1875V11.7458C2.1875 12.4692 2.1875 12.8308 2.32829 13.1073C2.45213 13.3503 2.64972 13.5479 2.89275 13.6717C3.16917 13.8125 3.53083 13.8125 4.25417 13.8125H13.8125"
                     stroke="white"
-                    stroke-width="1.29167"
-                    stroke-linecap="round"
+                    strokeWidth="1.29167"
+                    strokeLinecap="round"
                   />
                 </svg>
               </button>
@@ -194,14 +242,14 @@ export default function ProfilePage({
               </div>
             </div>
             <div className="flex lg:text-[16px] text-[12px] lg:mt-[25px] font-aktiv-medium font-medium lg:gap-[31px] gap-2">
-              {profile?.chains.includes("bsc") && (
+              {profile?.chains && (
                 <button
                   className={`px-[9px] lg:py-[10px] py-1.5 rounded-[10px]  flex items-center gap-1 ${
-                    activeTab === "BNB"
+                    activeTab === "BSC"
                       ? "bg-white text-black"
                       : "bg-transparent"
                   }`}
-                  onClick={() => setActiveTab("BNB")}
+                  onClick={() => setActiveTab("BSC")}
                 >
                   <Image
                     src={"/bnb.svg"}
@@ -214,7 +262,7 @@ export default function ProfilePage({
                 </button>
               )}
 
-              {profile?.chains.includes("eth") && (
+              {profile?.chains && (
                 <button
                   className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
                     activeTab === "ETH"
@@ -233,7 +281,7 @@ export default function ProfilePage({
                   ETH
                 </button>
               )}
-              {profile?.chains.includes("base") && (
+              {profile?.chains && (
                 <button
                   className={`px-[9px] py-[10px] rounded-[10px]  flex items-center gap-1 ${
                     activeTab === "BASE"
@@ -252,7 +300,7 @@ export default function ProfilePage({
                   BASE
                 </button>
               )}
-              {/* {["1d", "3d", "7d", "14d", "30d"].map((period) => (
+              {["1d", "3d", "7d", "14d", "30d"].map((period) => (
                 <button
                   key={period}
                   className={` px-[9px] lg:py-[10px] py-1.5 rounded-[10px] lg:hidden ${
@@ -262,7 +310,7 @@ export default function ProfilePage({
                 >
                   {period}
                 </button>
-              ))} */}
+              ))}
             </div>
 
             {/* Token Filters */}
@@ -286,9 +334,9 @@ export default function ProfilePage({
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow p-4 text-[18px] font-aktiv-regular  grid grid-cols-1 lg:grid-cols-7 gap-6">
+      <div className="flex-grow p-4 text-[18px] font-aktiv-regular  grid grid-cols-1 lg:grid-cols-7 gap-6 px-5 lg:px-[80px]">
         {/* Top Holdings */}
-        <div className="bg-[#0C0C0C]  lg:h-[390px] h-[320px] custom-scrollbar overflow-y-auto  border border-white/10 rounded-lg col-span-3 overflow-hidden">
+        <div className="bg-[#0C0C0C]  lg:h-[390px] h-[320px]  w-full  border border-white/10 rounded-lg lg:col-span-3 overflow-hidden">
           <div className="flex items-center py-[17.11px] justify-between p-3 border-b border-white/10">
             <h3 className="font-medium">TOP HOLDINGS</h3>
             <span className="text-white/80">
@@ -296,30 +344,44 @@ export default function ProfilePage({
             </span>
           </div>
 
-          <div className="">
+          <div className="  h-full overflow-y-auto custom-scrollbar">
             {holdingisLoading
               ? Array(10)
                   .fill(null)
                   .map((_, index) => (
                     //@ts-ignore
-                    <TokenHolding key={index} data={null} loading={true} />
+                    <TokenHolding
+                      key={index}
+                      loading={true}
+                      chain={activeTab}
+                    />
                   ))
               : holdings?.map((holding, index) => (
-                  <TokenHolding key={index} data={holding} loading={false} />
+                  <TokenHolding
+                    key={index}
+                    data={holding}
+                    loading={false}
+                    chain={activeTab}
+                  />
                 ))}
           </div>
         </div>
 
         {/* DEFI Trades */}
-        <div className="bg-[#0C0C0C] lg:h-[390px] h-[320px] custom-scrollbar overflow-y-auto  border font-aktiv-regular col-span-4 text-[16px] border-white/10 rounded-lg overflow-hidden">
+        <div className="bg-[#0C0C0C] lg:h-[390px] h-[320px]  border font-aktiv-regular w-full lg:col-span-4 text-[16px] border-white/10 rounded-lg overflow-hidden">
           <div className="flex items-center w-full gap-4 justify-between p-3 py-[17.11px] border-b border-white/10">
             <h3 className="font-medium">DEFI TRADES</h3>
           </div>
 
-          <div className="divide-y divide-white/5">
-            {trades.map((trade, index) => (
-              <TradeItem {...trade} key={index} />
-            ))}
+          <div className="divide-y divide-white/5 h-full overflow-y-auto custom-scrollbar">
+            {filteredTrades
+              .filter(
+                (o) =>
+                  o.chain.toLocaleLowerCase() == activeTab.toLocaleLowerCase()
+              )
+              .map((trade, index) => (
+                <TradeItem {...trade} key={index} />
+              ))}
           </div>
         </div>
       </div>
@@ -362,8 +424,8 @@ export default function ProfilePage({
                   <path
                     d="M8.5 11L4.5 15M4.5 15L8.5 19M4.5 15H16.5M12.5 3L16.5 7M16.5 7L12.5 11M16.5 7H4.5"
                     stroke="white"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
                 <span>$23,548.9</span>
@@ -373,13 +435,11 @@ export default function ProfilePage({
 
           {/* Token PNL Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 px-[8px] py-[10px] gap-x-[11px] gap-y-[15px]">
-            {Object.entries(groupTrade).map(([symbol, transactions]) =>
-              transactions
-                .slice(0, 2)
-                .map((tx, index) => (
-                  <TokenPnlItem symbol={symbol} key={index} {...tx} />
-                ))
-            )}
+            {tokenPnl
+              ?.filter((o) => o.totalSells != 0)
+              ?.map((token, index) => (
+                <TokenPnlItem key={index} {...token} />
+              ))}
           </div>
         </div>
       </div>

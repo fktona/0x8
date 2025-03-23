@@ -43,15 +43,16 @@ export function formatNumber(value: string | number | undefined): string {
   const num = typeof value === "string" ? parseFloat(value) : value;
   if (isNaN(num)) return "0";
 
-  // Format the number based on its size
-  if (Math.abs(num) >= 1000000) {
-    return (num / 1000000).toFixed(2) + "M";
-  } else if (Math.abs(num) >= 1000) {
-    return (num / 1000).toFixed(2) + "K";
-  } else if (Math.abs(num) < 0.01 && num !== 0) {
+  // Format the number based on its size - use absolute value to remove negative signs
+  const absNum = Math.abs(num);
+  if (absNum >= 1000000) {
+    return (absNum / 1000000).toFixed(2) + "M";
+  } else if (absNum >= 1000) {
+    return (absNum / 1000).toFixed(2) + "K";
+  } else if (absNum < 0.01 && num !== 0) {
     return "<0.01";
   } else {
-    return Math.abs(num).toFixed(2);
+    return absNum.toFixed(2);
   }
 }
 
