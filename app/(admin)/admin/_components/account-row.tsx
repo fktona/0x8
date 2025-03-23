@@ -27,11 +27,12 @@ export default function AccountRow({ account, onDelete, index }: AccountProps) {
               className="rounded-full"
             />
           </ProfileLink>
-          <span className="font-medium w-[80px]">
+          <span className="font-medium lg:hidden w-[80px]">
             {account.name.length > 7
               ? `${account.name.substring(0, 7)}...`
               : account.name}
           </span>
+          <span className="font-medium  w-[80px]">{account.name}</span>
 
           <div className="min-w-[10px]  flex  mx-4 items-center justify-center gap-2">
             {account.twitter && (
