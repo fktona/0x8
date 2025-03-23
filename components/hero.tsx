@@ -1,7 +1,7 @@
 import { cn } from "@/libs/utils";
 import React from "react";
 import Image from "next/image";
-import { Link } from "lucide-react";
+import Link from "next/link";
 function Hero() {
   return (
     <div className="relative flex h-full pb-[91px] flex-col lg:flex-row  items-center justify-between ">
