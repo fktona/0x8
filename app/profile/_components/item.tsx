@@ -1,3 +1,4 @@
+import DexLink from "@/components/dex-link";
 import { formatNumber, timeAgo } from "@/libs/utils";
 import { TradeTransaction } from "@/types";
 import Image from "next/image";
@@ -11,6 +12,8 @@ export default function TradeItem({
   tokenOutAmountUsd,
   tokenOutAmount,
   blockTimestamp,
+  tokenInAddress,
+  tokenOutAddress,
   chain,
   type,
 }: Partial<TradeTransaction>) {
@@ -25,26 +28,35 @@ export default function TradeItem({
       >
         {type}
       </div>
-      <div className="flex items-center gap-2">
-        <span className="text-sm">{`${
-          type == "buy"
-            ? formatNumber(tokenInAmount)
-            : formatNumber(tokenOutAmount)
-        } `}</span>
-        <Image
-          src={
-            (type === "buy" ? tokenInLogo : tokenOutLogo) ||
-            (chain ? `/${chain.toLowerCase()}.svg` : "/default.svg")
-          }
-          alt={(type == "buy" ? tokenInSymbol : tokenOutSymbol) || "logo"}
-          width={20}
-          height={20}
-          className="rounded-full"
-        />
-        <span className="text-sm">
-          {type === "buy" ? tokenInSymbol : tokenOutSymbol}
-        </span>
-      </div>
+      <DexLink
+        chain={chain as string}
+        tokenAddress={
+          type === "buy"
+            ? (tokenInAddress as string)
+            : (tokenOutAddress as string)
+        }
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-sm">{`${
+            type == "buy"
+              ? formatNumber(tokenInAmount)
+              : formatNumber(tokenOutAmount)
+          } `}</span>
+          <Image
+            src={
+              (type === "buy" ? tokenInLogo : tokenOutLogo) ||
+              (chain ? `/${chain.toLowerCase()}.svg` : "/default.svg")
+            }
+            alt={(type == "buy" ? tokenInSymbol : tokenOutSymbol) || "logo"}
+            width={20}
+            height={20}
+            className="rounded-full"
+          />
+          <span className="text-sm">
+            {type === "buy" ? tokenInSymbol : tokenOutSymbol}
+          </span>
+        </div>
+      </DexLink>
 
       <div className="flex items-center gap-2">
         <span className="text-sm">{formatNumber(tokenOutAmountUsd)}</span>

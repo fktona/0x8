@@ -8,6 +8,7 @@ import { AlTransactionsProps, TradeTransaction, UserProfile } from "@/types";
 import { cn, formatNumber, timeAgo } from "@/libs/utils";
 import { useTransactionsStore } from "@/store/store";
 import ProfileLink from "./profile-link";
+import DexLink from "./dex-link";
 
 interface DataTypes {
   name: string;
@@ -136,28 +137,37 @@ const TradeBox = ({
                       }`}
                 </span>
                 <span className="text-white/80">Of</span>
-                <div className="flex items-center gap-1">
-                  <Image
-                    src={
-                      item.type === "buy"
-                        ? item?.tokenInLogo ?? `${item.chain}.svg`
-                        : item?.tokenOutLogo || `${item.chain}.svg`
-                    }
-                    alt={
-                      item.type == "buy"
+                <DexLink
+                  tokenAddress={
+                    item.type === "buy"
+                      ? item.tokenInAddress
+                      : item.tokenOutAddress
+                  }
+                  chain={chain}
+                >
+                  <div className="flex items-center gap-1">
+                    <Image
+                      src={
+                        item.type === "buy"
+                          ? item?.tokenInLogo ?? `${item.chain}.svg`
+                          : item?.tokenOutLogo || `${item.chain}.svg`
+                      }
+                      alt={
+                        item.type == "buy"
+                          ? item?.tokenInSymbol
+                          : item.tokenInSymbol
+                      }
+                      width={16}
+                      height={16}
+                      className="rounded-full"
+                    />
+                    <span className="text-white/80">
+                      {item.type == "buy"
                         ? item?.tokenInSymbol
-                        : item.tokenInSymbol
-                    }
-                    width={16}
-                    height={16}
-                    className="rounded-full"
-                  />
-                  <span className="text-white/80">
-                    {item.type == "buy"
-                      ? item?.tokenInSymbol
-                      : item.tokenInSymbol}
-                  </span>
-                </div>
+                        : item.tokenInSymbol}
+                    </span>
+                  </div>
+                </DexLink>
                 <span className="text-white/80">at</span>
                 <span className="text-yellow-500">
                   {item.type == "buy"

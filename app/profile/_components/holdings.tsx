@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FC } from "react";
 import { useTransactionsStore } from "@/store/store";
 import { tr } from "framer-motion/client";
+import DexLink from "@/components/dex-link";
 
 interface TokenHoldingProps {
   chain: string;
@@ -35,17 +36,18 @@ const TokenHolding: FC<TokenHoldingProps> = ({
 
   return (
     <div className="flex text-[14px] items-center justify-between p-3">
-      <div className="flex items-center gap-2">
-        <Image
-          src={logo?.tokenInLogo || `/${chain.toLowerCase()}.svg`}
-          alt={"BNB"}
-          width={20}
-          height={20}
-          className="rounded-full"
-        />
-        <span className="text-sm font-medium">${data?.tokenSymbol}</span>
-      </div>
-
+      <DexLink chain={chain} tokenAddress={data?.tokenAddress as string}>
+        <div className="flex items-center gap-2">
+          <Image
+            src={logo?.tokenInLogo || `/${chain.toLowerCase()}.svg`}
+            alt={"BNB"}
+            width={20}
+            height={20}
+            className="rounded-full"
+          />
+          <span className="text-sm font-medium">${data?.tokenSymbol}</span>
+        </div>
+      </DexLink>
       <div className="text-sm">
         ${formatNumber2(data?.tokenBalanceUSD.toString() || "0")}
       </div>

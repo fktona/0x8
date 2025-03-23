@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import TokenPanelSkeleton from "./skeleton";
 import { formatNumber } from "@/libs/utils";
+import DexLink from "@/components/dex-link";
 
 interface PanelProps {
   tokenName: string;
@@ -50,20 +51,22 @@ export default function TokenPanel({
       transition={{ duration: 0.3 }}
     >
       <div className="flex items-center justify-between p-3">
-        <div className="flex items-center gap-2">
-          <Image
-            src={data[0]?.tokenInLogo || `${data[0]?.chain}.svg`}
-            alt={tokenName || "Token"}
-            width={30}
-            height={30}
-            className="rounded-full"
-          />
+        <DexLink tokenAddress={data[0]?.tokenInAddress} chain={data[0]?.chain}>
+          <div className="flex items-center gap-2">
+            <Image
+              src={data[0]?.tokenInLogo || `${data[0]?.chain}.svg`}
+              alt={tokenName || "Token"}
+              width={30}
+              height={30}
+              className="rounded-full"
+            />
 
-          <span className="text-sm font-medium">{tokenName}</span>
-          <span className="text-xs text-gray-400">
-            MC: {formatNumber(marketCap)}
-          </span>
-        </div>
+            <span className="text-sm font-medium">{tokenName}</span>
+            <span className="text-xs text-gray-400">
+              MC: {formatNumber(marketCap)}
+            </span>
+          </div>
+        </DexLink>
         <div className={`text-sm ${priceChangeClass}`}>
           {formattedPriceChange}%
         </div>

@@ -1,6 +1,7 @@
 import { cn } from "@/libs/utils";
 import React from "react";
 import Image from "next/image";
+import { Link } from "lucide-react";
 function Hero() {
   return (
     <div className="relative flex h-full pb-[91px] flex-col lg:flex-row  items-center justify-between ">
@@ -30,9 +31,11 @@ function Hero() {
           />
         </h1>
         <h1>traders in real time</h1>
-        <button className="bg-white hover:bg-white/80 md:mt-[36px] mt-[25px] text-[16px] font-medium text-[#000] rounded-[80px] px-[20px] py-[10px] lg:px-[42px] lg:py-[17px]">
-          Get started
-        </button>
+        <Link href="/trades">
+          <button className="bg-white hover:bg-white/80 md:mt-[36px] mt-[25px] text-[16px] font-medium text-[#000] rounded-[80px] px-[20px] py-[10px] lg:px-[42px] lg:py-[17px]">
+            Get started
+          </button>
+        </Link>
       </div>
       <div className="relative md:block -right-[40px] 2xl:-right-[80px] hidden h-[400px] w-[500px] ">
         <Image alt="hero" src="/hero-g2.svg" fill />
