@@ -124,3 +124,10 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     return false;
   }
 }
+
+export const removeWrapped = (str: string | undefined) => {
+  if (!str) return "";
+  str == "WETH" ? (str = "ETH") : str;
+  str == "WBNB" ? (str = "BNB") : str;
+  return str;
+};

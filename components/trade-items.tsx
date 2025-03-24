@@ -4,7 +4,7 @@ import { useTransition, useState } from "react";
 import ProfileLink from "./profile-link";
 import Image from "next/image";
 import DexLink from "./dex-link";
-import { cn, formatNumber, timeAgo } from "@/libs/utils";
+import { cn, formatNumber, removeWrapped, timeAgo } from "@/libs/utils";
 import type { TokenMetaData, TradeTransaction } from "@/types";
 import TruncatedText from "./forced-trucate";
 
@@ -70,7 +70,7 @@ function TradeItems({
           ? `${formatNumber(item.tokenOutAmount)} `
           : `${formatNumber(item.tokenOutAmount)} `}
         <TruncatedText
-          text={item.type === "buy" ? item.tokenOutSymbol : item.tokenInSymbol}
+          text={item.type === "buy" ?removeWrapped(item.tokenOutSymbol) : removeWrapped(item.tokenInSymbol)}
           maxLength={4}
           forceTruncate={true}
         />
@@ -80,7 +80,7 @@ function TradeItems({
 
       <DexLink
         tokenAddress={
-          item.type === "buy" ? item.tokenInAddress : item.tokenOutAddress
+          item.type === "buy" ?  item.tokenInAddress : item.tokenOutAddress
         }
         chain={item.chain}
       >
@@ -88,7 +88,7 @@ function TradeItems({
           <Image
             src={
               item.type === "buy"
-                ? item?.tokenInLogo ?? `/${item.chain}.svg`
+                ? item?.tokenInLogo || `/${item.chain}.svg`
                 : item?.tokenOutLogo || `/${item.chain}.svg`
             }
             alt={item.type == "buy" ? item?.tokenInSymbol : item.tokenOutSymbol}
@@ -98,7 +98,7 @@ function TradeItems({
           />
           <TruncatedText
             text={
-              item.type == "buy" ? item?.tokenInSymbol : item.tokenOutSymbol
+              item.type == "buy" ? removeWrapped(item?.tokenInSymbol) :removeWrapped(item.tokenOutSymbol)
             }
             className="text-white/80"
             maxLength={3}

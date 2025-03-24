@@ -1,5 +1,5 @@
 import DexLink from "@/components/dex-link";
-import { formatNumber, timeAgo } from "@/libs/utils";
+import { formatNumber, removeWrapped, timeAgo } from "@/libs/utils";
 import { TradeTransaction } from "@/types";
 import Image from "next/image";
 
@@ -53,7 +53,9 @@ export default function TradeItem({
             className="rounded-full"
           />
           <span className="text-sm">
-            {type === "buy" ? tokenInSymbol : tokenOutSymbol}
+            {type === "buy"
+              ? removeWrapped(tokenInSymbol)
+              : removeWrapped(tokenOutSymbol)}
           </span>
         </div>
       </DexLink>
@@ -71,7 +73,9 @@ export default function TradeItem({
           className="rounded-full"
         />
         <span className="text-sm">
-          {type === "buy" ? tokenOutSymbol : tokenInSymbol}
+          {type === "buy"
+            ? removeWrapped(tokenOutSymbol)
+            : removeWrapped(tokenInSymbol)}
         </span>
       </div>
 

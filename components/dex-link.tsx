@@ -18,7 +18,7 @@ function DexLink({
       href={dexUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="cursor-pointer text-blue-500 hover:underline"
+      className="cursor-pointer  hover:underline"
     >
       {children}
     </a>

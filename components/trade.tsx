@@ -43,6 +43,7 @@ const TradeBox = ({
   loading: boolean;
   chain: string;
 }) => {
+  console.log(data, "data");
   return (
     <div className="border md:h-[390px] flex flex-col h-[320px]  border-white/10 rounded-[12px] py-[17px] md:px-[12px] px-[10px] bg-black/40 w-full">
       <div className="text-white/80 relative font-light w-full text-[11px] lg:text-[14px] flex justify-between items-center pb-[17px] border-b border-white/10">
@@ -87,14 +88,20 @@ const TradeBox = ({
             ))}
           </div>
         ) : (
-          data?.map((item, index) => (
-            <div
-              className="flex w-full relative z-50 justify-between items-center py-[10px]"
-              key={index}
-            >
-              <TradeItems item={item} />
-            </div>
-          ))
+          data
+            ?.sort(
+              (a, b) =>
+                new Date(b.blockTimestamp).getTime() -
+                new Date(a.blockTimestamp).getTime()
+            )
+            .map((item, index) => (
+              <div
+                className="flex w-full relative z-50 justify-between items-center py-[10px]"
+                key={index}
+              >
+                <TradeItems item={item} />
+              </div>
+            ))
         )}
       </div>
     </div>
@@ -232,6 +239,7 @@ function Trade() {
   const ethTx = filterTransactionsByChain(usersTransactions, "eth");
   const bscTx = filterTransactionsByChain(usersTransactions, "bsc");
   const baseTx = filterTransactionsByChain(usersTransactions, "base");
+  console.log("ethTx", ethTx);
 
   return (
     <div className="w-full mt-[52px] min-h-[600px] ">
@@ -256,7 +264,7 @@ function Trade() {
       </div>
       <div className="flex flex-col   md:flex-row gap-4 w-full bg-black ">
         <TradeBox
-          chain="eth"
+          chain="bsc"
           loading={isLoading}
           data={
             bscTx as (TradeTransaction & {
@@ -266,7 +274,7 @@ function Trade() {
           }
         />
         <TradeBox
-          chain="bsc"
+          chain="eth"
           loading={isLoading}
           data={
             ethTx as (TradeTransaction & {
