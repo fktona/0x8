@@ -45,7 +45,7 @@ const TradeBox = ({
 }) => {
   return (
     <div className="border md:h-[390px] flex flex-col h-[320px]  border-white/10 rounded-[12px] py-[17px] md:px-[12px] px-[10px] bg-black/40 w-full">
-      <div className="text-white/80 font-light w-full text-[11px] lg:text-[14px] flex justify-between items-center pb-[17px] border-b border-white/10">
+      <div className="text-white/80 relative font-light w-full text-[11px] lg:text-[14px] flex justify-between items-center pb-[17px] border-b border-white/10">
         <h4 className="flex items-center capitalize text-[14px] lg:text-[16px]  lg:gap-2 gap-1 w-full  justify-between">
           Recent trades
           <div className="flex items-center  text-[11px] lg:text-[14px] gap-1">
@@ -89,7 +89,7 @@ const TradeBox = ({
         ) : (
           data?.map((item, index) => (
             <div
-              className="flex w-full justify-between items-center py-[10px]"
+              className="flex w-full relative z-50 justify-between items-center py-[10px]"
               key={index}
             >
               <TradeItems item={item} />

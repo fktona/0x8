@@ -3,6 +3,7 @@ import { TokenPanelProps } from "./tokens";
 import Image from "next/image";
 import Profile from "@/app/profile/[id]/page";
 import ProfileLink from "@/components/profile-link";
+import TruncatedText from "@/components/forced-trucate";
 
 export default function TokenTransaction({
   name,
@@ -29,7 +30,13 @@ export default function TokenTransaction({
             className="rounded-full"
           />
         </ProfileLink>
-        <span className="truncate">{name}</span>
+        <TruncatedText
+          text={name as string}
+          maxLength={10}
+          className="t"
+          forceTruncate
+        />
+        {/* <span className="truncate">{name}</span> */}
       </div>
       <div className="text-white">
         {formatNumber(tokenOutAmount)}{" "}

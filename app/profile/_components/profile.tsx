@@ -186,6 +186,8 @@ export default function ProfilePage({
     };
   }, [tokenPnl]);
 
+  console.log(totalBuysAndSells, "totalBuy sAndSells");
+
   return (
     <div className="min-h-screen  text-white flex flex-col">
       {/* Profile Header */}
@@ -515,7 +517,9 @@ export default function ProfilePage({
                 </span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-green-500">
+                <span
+                  className={netTrade < 0 ? "text-red-500" : "text-green-500"}
+                >
                   {formatNumber2(netTrade?.toString())}
                 </span>
                 <Image
