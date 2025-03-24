@@ -32,7 +32,7 @@ export default function TradesList({ trades }: TradeProps) {
               target="_blank"
               rel="noreferrer"
             >
-              <Image src={"/x.svg"} alt="X" width={20} height={20} />
+              <Image src={"/x.svg"} alt="X" width={16} height={16} />
             </a>
           )}
           {trades.telegram && (
@@ -49,47 +49,40 @@ export default function TradesList({ trades }: TradeProps) {
               />
             </a>
           )}
-          <Image
-            src={`${trades.transactions[0].chain}.svg`}
-            alt={trades.transactions[0].chain}
-            width={20}
-            height={20}
-            className="rounded-full"
-          />
         </div>
 
         <div className="ml-auto flex items-center gap-1">
           <button
             onClick={() => copyToClipboard(trades?.wallet)}
-            className="text-sm"
+            className="text-sm mr-3"
           >
             {trades.wallet.slice(0, 5)}***{trades.wallet.slice(-5)}
           </button>
-          {trades.transactions[0].chain === "bsc" && (
+          {trades.chains.includes("bsc") && (
             <Image
               src={"/bnb.svg"}
               alt={"BNB"}
               width={20}
               height={20}
-              className="rounded-full"
+              className="rounded-full opacity-50 hover:opacity-100"
             />
           )}
-          {trades.transactions[0].chain === "eth" && (
+          {trades.chains.includes("eth") && (
             <Image
               src={"/eth.svg"}
               alt={"ETH"}
               width={20}
               height={20}
-              className="rounded-full"
+              className="rounded-full  opacity-50 hover:opacity-100"
             />
           )}
-          {trades.transactions[0].chain === "base" && (
+          {trades.chains.includes("base") && (
             <Image
               src={"/base.svg"}
               alt={"base"}
               width={20}
               height={20}
-              className="rounded-full"
+              className="rounded-full  opacity-50 hover:opacity-100"
             />
           )}
         </div>

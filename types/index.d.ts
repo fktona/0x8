@@ -130,3 +130,29 @@ export type TokenTradeSummary = {
   pnlUSD: string;
   pnlPercentage: number;
 };
+
+
+export type ExtendedTokenTradeSummary = {
+  tokenAddress: string;
+  tokenName: string;
+  tokenSymbol: string;
+  tradeCount: number;
+  totalBuys: number;
+  totalSells: number;
+  totalTokenBought: string;
+  totalTokenBoughtUSD: string;
+  totalBuyTokenAmount: string;
+  buyTokenName: string;
+  buyTokenSymbol: string;
+  totalTokenSold: string;
+  totalTokenSoldUSD: string;
+  totalSellTokenAmount: string;
+  sellTokenName: string;
+  sellTokenSymbol: string;
+  pnlUSD: string;
+  pnlPercentage: number;
+  avgBuyTimeSeconds: number;
+  avgSellTimeSeconds: number;
+  totalSellTokenAmountUSD: string;
+  totalBuyTokenAmountUSD: string;
+};

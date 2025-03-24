@@ -68,7 +68,7 @@ export default function AdminDashboardPage({
         <div className="w-full inset-0  bgg2 z-0 h-[191px] flex items-center justify-center">
           <h1 className="font-aktiv-bold font-bold text-[63px]">ADMIN</h1>
         </div>
-        <div className="flex-grow z-10 p pb-8 lg:px-[80px] px-4">
+        <div className="flex-grow z-10 p pb-8 lg:px-[80px] px-4 max-w-[2560px] w-full self-center">
           <div className="flex lg:items-center flex-col gap-4 lg:flex-row justify-between mb-6">
             <div className="flex items-center gap-4">
               <h2 className="lg:text-[34px] text-[24px] font-aktiv-regular font-medium ">

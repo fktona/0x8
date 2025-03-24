@@ -7,7 +7,7 @@ import Trade from "@/components/trade";
 export default function Home() {
   try {
     return (
-      <div className="w-full font-aktiv-regular lg:px-[40px] 2xl:px-[80px] px-5">
+      <div className="w-full font-aktiv-regular lg:px-[40px] 2xl:px-[80px] px-5  max-w-screen-2xl mx-auto">
         <Search />
         <Hero />
         <Trade />

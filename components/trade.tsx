@@ -1,14 +1,14 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import { getAllUsersTransactions } from "@/app/actions/action";
-import { AlTransactionsProps, TradeTransaction, UserProfile } from "@/types";
+import { AlTransactionsProps, TradeTransaction, TokenMetaData } from "@/types";
 import { cn, formatNumber, timeAgo } from "@/libs/utils";
 import { useTransactionsStore } from "@/store/store";
 import ProfileLink from "./profile-link";
 import DexLink from "./dex-link";
+import { getTokenMetadata } from "@/app/actions/action";
+import TradeItems from "./trade-items";
 
 interface DataTypes {
   name: string;
@@ -28,20 +28,7 @@ interface TradeBoxProps {
   data: DataTypes[];
   loading?: boolean;
 }
-const userWallets = [
-  {
-    address: "0xC9FeDC96A719C09476fd88992Ef75A82Ac4437C3",
-    name: "WETH Token Contract",
-  },
-  {
-    address: "0xC9FeDC96A719C09476fd88992Ef75A82Ac4437C3",
-    name: "Binance Hot Wallet",
-  },
-  {
-    address: "0x00e39304c139EBC5B03576Da1359Eb2ecfF07E75",
-    name: "Ethereum 2.0 Deposit Contract",
-  },
-];
+
 const TradeBox = ({
   chain,
   loading,
@@ -105,79 +92,7 @@ const TradeBox = ({
               className="flex w-full justify-between items-center py-[10px]"
               key={index}
             >
-              <div className="flex w-full flex-wrap justify-start 2xl:justify-between  items-center gap-[6px] text-white/80 font-light">
-                <ProfileLink walletAddress={item.wallet}>
-                  <Image
-                    src={item.imageUrl || "/placeholder.svg"}
-                    alt={item.name}
-                    width={20}
-                    height={20}
-                    className="rounded-full"
-                  />
-                </ProfileLink>
-                <span className="text-white/80 font-light">{item.name}</span>
-                <span
-                  className={
-                    item.type === "buy" ? "text-green-500" : "text-red-500"
-                  }
-                >
-                  {item.type === "buy" ? "Bought" : "Sold"}
-                </span>
-                <span
-                  className={cn(
-                    item.type == "buy" ? "text-green-500" : "text-red-500"
-                  )}
-                >
-                  {item.type === "buy"
-                    ? `${formatNumber(item.tokenOutAmount)} ${
-                        item.tokenOutSymbol
-                      }`
-                    : `${formatNumber(item.tokenInAmount)} ${
-                        item.tokenInSymbol
-                      }`}
-                </span>
-                <span className="text-white/80">Of</span>
-                <DexLink
-                  tokenAddress={
-                    item.type === "buy"
-                      ? item.tokenInAddress
-                      : item.tokenOutAddress
-                  }
-                  chain={item.chain}
-                >
-                  <div className="flex items-center gap-1">
-                    <Image
-                      src={
-                        item.type === "buy"
-                          ? item?.tokenInLogo ?? `${item.chain}.svg`
-                          : item?.tokenOutLogo || `${item.chain}.svg`
-                      }
-                      alt={
-                        item.type == "buy"
-                          ? item?.tokenInSymbol
-                          : item.tokenInSymbol
-                      }
-                      width={16}
-                      height={16}
-                      className="rounded-full"
-                    />
-                    <span className="text-white/80">
-                      {item.type == "buy"
-                        ? item?.tokenInSymbol
-                        : item.tokenInSymbol}
-                    </span>
-                  </div>
-                </DexLink>
-                <span className="text-white/80">at</span>
-                <span className="text-yellow-500">
-                  {item.type == "buy"
-                    ? formatNumber(item.tokenInAmountUsd)
-                    : formatNumber(item.tokenInAmountUsd)}
-                </span>
-                <span className="text-white/80">
-                  {timeAgo(item.blockTimestamp)}
-                </span>
-              </div>
+              <TradeItems item={item} />
             </div>
           ))
         )}

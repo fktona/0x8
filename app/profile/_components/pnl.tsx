@@ -59,61 +59,35 @@
 // }
 
 import { formatNumber, timeAgo } from "@/libs/utils";
-import type { TokenTradeSummary, TradeTransaction } from "@/types";
+import type {
+  ExtendedTokenTradeSummary,
+  TokenTradeSummary,
+  TradeTransaction,
+} from "@/types";
 import Image from "next/image";
 import { cn } from "@/libs/utils";
 import { useTransactionsStore } from "@/store/store";
 
-interface TokenPnlItemProps {
-  symbol: string;
-  transactions?: TradeTransaction[];
-  activeTab: string;
-}
-
 export default function TokenPnlItem({
   tokenAddress,
-  tokenName,
   tokenSymbol,
-  totalBuys,
-  totalSells,
   pnlPercentage,
   pnlUSD,
-  totalTokenBought,
   totalTokenSold,
-  totalTokenBoughtUSD,
-  totalTokenSoldUSD,
+  totalBuyTokenAmount,
+  totalSellTokenAmount,
+  avgBuyTimeSeconds,
+  sellTokenName,
+  buyTokenSymbol,
+  sellTokenSymbol,
   activeTab,
-}: TokenTradeSummary & { activeTab: string }) {
+}: ExtendedTokenTradeSummary & { activeTab: string }) {
   // Format the amounts properly, handling negative values
 
-  console.log({
-    tokenAddress,
-
-    tokenSymbol,
-    totalBuys,
-    totalSells,
-    pnlPercentage,
-    pnlUSD,
-    totalTokenBought,
-    totalTokenSold,
-    totalTokenBoughtUSD,
-    totalTokenSoldUSD,
-    activeTab,
-  });
   const { transactions, isLoading, usersTransactions } = useTransactionsStore();
   const logo = transactions.find((t) => t.tokenInAddress === tokenAddress);
 
-  const calPnlPercentage = parseFloat(
-    (
-      ((-1 * parseFloat(totalTokenSoldUSD) - parseFloat(totalTokenBoughtUSD)) /
-        parseFloat(totalTokenBoughtUSD)) *
-      100
-    ).toFixed(2)
-  );
-  const calPnlUSD =
-    -1 * parseFloat(totalTokenSoldUSD) - parseFloat(totalTokenBoughtUSD);
-
-  const checkLoss = calPnlUSD < 0 ? true : false;
+  const checkLoss = pnlPercentage.toString().startsWith("-");
 
   return (
     <div className="bg-[#1B1B1B] p-[10px] rounded-sm space-y-[13px]">
@@ -138,9 +112,14 @@ export default function TokenPnlItem({
                 : "text-green-500 text-[14px]"
             }
           >
-            {calPnlPercentage}%
+            {pnlPercentage.toString().startsWith("-")
+              ? pnlPercentage.toString().slice(1)
+              : pnlPercentage.toString()}
+            %
           </span>
-          <span className="">${formatNumber(calPnlUSD)}</span>
+          <span className="">
+            ${pnlUSD.startsWith("-") ? pnlUSD.slice(1) : pnlUSD}
+          </span>
         </div>
       </div>
 
@@ -154,21 +133,25 @@ export default function TokenPnlItem({
       <div className="space-y-1">
         <div className="grid grid-cols-4 text-[14px]">
           <div className="text-green-500">Buy</div>
-          <div className="text-yellow-500">
-            ${formatNumber(totalTokenBoughtUSD)} USD
+          <div className="text-yellow-500 ">
+            {formatNumber(totalBuyTokenAmount)} {tokenSymbol}
           </div>
           <div className="text-yellow-500">
-            {formatNumber(totalTokenBought)}
+            {/* {formatNumber(totalBuyTokenAmount)} */}
           </div>
           {/* <div className="text-gray-400">{time}</div> */}
         </div>
-        <div className="grid grid-cols-4 text-[14px]">
+        <div className="grid grid-cols-4 text-[14px] ">
           <div className="text-red-500">Sell</div>
           <div className="text-yellow-500">
-            {formatNumber(totalTokenSoldUSD)} USD
+            {formatNumber(totalSellTokenAmount)} {sellTokenSymbol}
           </div>
           <div className="text-yellow-500">{formatNumber(totalTokenSold)}</div>
-          {/* <div className="text-gray-400">{time}</div> */}
+          <div className="text-gray-400">
+            {timeAgo(
+              new Date(Date.now() - avgBuyTimeSeconds * 1000).toISOString()
+            )}
+          </div>
         </div>
       </div>
     </div>

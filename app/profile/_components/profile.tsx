@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import TradeItem from "./item";
 import TokenHolding from "./holdings";
 import TokenPnlItem from "./pnl";
 import Image from "next/image";
 import type {
+  ExtendedTokenTradeSummary,
   TokenHoldings,
   TokenTradeSummary,
   TradeTransaction,
@@ -15,6 +16,53 @@ import type {
 import { formatNumber2, groupTransactionsByTokenPair } from "@/libs/utils";
 import { ArrowLeft, Copy } from "lucide-react";
 import { getUserPnl, getUserTokenHoldings } from "@/app/actions/action";
+import TokenPanelSkeleton from "@/app/tokens/_components/skeleton";
+
+function calculateTradeSums(
+  trades: {
+    totalBuys: number;
+    totalSells: number;
+    totalBuyTokenAmount: string;
+    totalSellTokenAmount: string;
+    totalBuyTokenAmountUSD: string;
+    totalSellTokenAmountUSD: string;
+  }[]
+): {
+  totalBuys: number;
+  totalSells: number;
+  totalBuyTokenAmount: number;
+  totalSellTokenAmount: number;
+  totalBuyTokenAmountUSD: number;
+  totalSellTokenAmountUSD: number;
+} {
+  return trades.reduce(
+    (totals, trade) => {
+      totals.totalBuys += trade.totalBuys;
+      totals.totalSells += trade.totalSells;
+      totals.totalBuyTokenAmount += parseFloat(trade.totalBuyTokenAmount);
+      totals.totalSellTokenAmount += parseFloat(trade.totalSellTokenAmount);
+      totals.totalBuyTokenAmountUSD += parseFloat(trade.totalBuyTokenAmountUSD);
+      totals.totalSellTokenAmountUSD += parseFloat(
+        trade.totalSellTokenAmountUSD
+      );
+      return totals;
+    },
+    {
+      totalBuys: 0,
+      totalSells: 0,
+      totalBuyTokenAmount: 0,
+      totalSellTokenAmount: 0,
+      totalBuyTokenAmountUSD: 0,
+      totalSellTokenAmountUSD: 0,
+    }
+  );
+}
+
+const allAmountsUsd = (trades: ExtendedTokenTradeSummary[]) =>
+  trades.reduce(
+    (acc, trade) => acc + parseFloat(trade.totalBuyTokenAmountUSD),
+    0
+  );
 
 export default function ProfilePage({
   trades,
@@ -29,6 +77,8 @@ export default function ProfilePage({
     trades[0]?.chain.toLocaleUpperCase() || "BSC"
   );
   const [holdings, setHoldings] = useState<TokenHoldings[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState("Most Recent");
 
   const combinedAddresses = [
     ...new Set(
@@ -48,7 +98,9 @@ export default function ProfilePage({
 
   console.log(groupTrade);
   const [pnlIsLoading, setPnlIsLoading] = useState(false);
-  const [tokenPnl, setTokenPnl] = useState<TokenTradeSummary[] | null>(null);
+  const [tokenPnl, setTokenPnl] = useState<ExtendedTokenTradeSummary[] | null>(
+    null
+  );
 
   const fetchTokenPnl = async (addresses: string[]) => {
     setPnlIsLoading(true);
@@ -124,6 +176,15 @@ export default function ProfilePage({
 
   const filteredTrades = filterTradesByPeriod(trades, activePeriod);
   const filteredGroupTrade = groupTransactionsByTokenPair(filteredTrades);
+  const { totalBuysAndSells, netTradeAmountUSD, netTrade } = useMemo(() => {
+    const totals = calculateTradeSums(tokenPnl || []);
+    return {
+      totalBuysAndSells: totals,
+      netTradeAmountUSD:
+        totals.totalBuyTokenAmountUSD - totals.totalSellTokenAmountUSD,
+      netTrade: totals.totalSellTokenAmount - totals.totalBuyTokenAmount,
+    };
+  }, [tokenPnl]);
 
   return (
     <div className="min-h-screen  text-white flex flex-col">
@@ -414,23 +475,51 @@ export default function ProfilePage({
           <div className="flex font-aktiv-regular text-[16px] items-center py-[12px] justify-between p-3 border-b border-white/10">
             <div className="flex items-center gap-4">
               <h3 className="font-aktiv-regular">Token PNL</h3>
-              <div className="flex items-center gap-2">
-                <button className="flex items-center gap-1 bg-white/5  px-[10px] py-[12px] rounded text-sm">
-                  Most Recent <span>▼</span>
-                </button>
+              <div className="flex items-center gap-2 relative">
+                <>
+                  <button
+                    className="flex items-center gap-1 bg-white/5 px-[10px] py-[12px] rounded text-sm"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    {selected} <span>{isOpen ? "▲" : "▼"}</span>
+                  </button>
+
+                  {isOpen && (
+                    <div className="absolute top-full left-0 mt-1 bg-[#222] border border-white/10 rounded shadow-lg z-10">
+                      {["Most Recent", "Daily", "Weekly"].map((option) => (
+                        <button
+                          key={option}
+                          className="block w-full text-left px-4 py-2 hover:bg-white/10 text-sm"
+                          onClick={() => {
+                            setSelected(option);
+                            setIsOpen(false);
+                          }}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <span className="text-green-500">224</span>
+                <span className="text-green-500">
+                  {totalBuysAndSells?.totalBuys}
+                </span>
                 <span>/</span>
-                <span className="text-red-500">298</span>
+                <span className="text-red-500">
+                  {totalBuysAndSells?.totalSells}
+                </span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-green-500">+234.45</span>
+                <span className="text-green-500">
+                  {formatNumber2(netTrade?.toString())}
+                </span>
                 <Image
-                  src={"/bnb.svg"}
+                  src={`/${activeTab.toLowerCase()}.svg`}
                   alt={"BNB"}
                   width={20}
                   height={20}
@@ -450,18 +539,26 @@ export default function ProfilePage({
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span>$23,548.9</span>
+                <span>${formatNumber2(netTradeAmountUSD?.toString())}</span>
               </div>
             </div>
           </div>
 
           {/* Token PNL Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 px-[8px] py-[10px] gap-x-[11px] gap-y-[15px]">
-            {tokenPnl
-              ?.filter((o) => o.totalSells != 0)
-              ?.map((token, index) => (
-                <TokenPnlItem key={index} {...token} activeTab={activeTab} />
-              ))}
+            {pnlIsLoading
+              ? Array(6)
+                  .fill(null)
+                  .map((_, index) => <TokenPanelSkeleton key={index} />)
+              : tokenPnl
+                  ?.filter((o) => o.totalSells != 0)
+                  ?.map((token, index) => (
+                    <TokenPnlItem
+                      key={index}
+                      {...token}
+                      activeTab={activeTab}
+                    />
+                  ))}
           </div>
         </div>
       </div>

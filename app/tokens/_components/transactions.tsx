@@ -18,7 +18,7 @@ export default function TokenTransaction({
   wallet,
 }: TokenPanelProps) {
   return (
-    <div className="grid grid-cols-4 text-xs p-2">
+    <div className="grid grid-cols-4  gap-2 text-xs p-2">
       <div className="flex items-center gap-1">
         <ProfileLink walletAddress={wallet}>
           <Image
@@ -29,7 +29,7 @@ export default function TokenTransaction({
             className="rounded-full"
           />
         </ProfileLink>
-        <span>{name}</span>
+        <span className="truncate">{name}</span>
       </div>
       <div className="text-white">
         {formatNumber(tokenOutAmount)}{" "}
