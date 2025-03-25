@@ -48,7 +48,7 @@ export const TraderPlatform: React.FC = () => {
   return (
     <div className=" text-white lg:mt-[100px] mt-[60px]">
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-8 pr-[95px] md:pr-0">
+      <div className="flex justify-between flex-col lg:flex-row gap-4 lg:items-center mb-8 pr-[95px] md:pr-0">
         <div>
           <h1 className="lg:text-[60px] text-[36px] leading-[54px] md:text-5xl font-bold mb-2">
             Built for trader
@@ -59,7 +59,7 @@ export const TraderPlatform: React.FC = () => {
           </p>
         </div>
         <Link href="/tokens">
-          <button className="bg-white hidden md:block text-black px-6 lg:px-[58px] lg:py-[21px] py-2 text-[16px] rounded-full font-medium hover:bg-gray-200 transition-colors">
+          <button className="bg-white  text-black px-6 lg:px-[58px] lg:py-[21px] py-2 text-[16px] rounded-full font-medium hover:bg-gray-200 transition-colors">
             Explore
           </button>
         </Link>

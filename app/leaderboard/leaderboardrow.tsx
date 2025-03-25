@@ -77,7 +77,7 @@ export default function LeaderboardRow({
             className="text-[16px] lg:w-[60px] mr-8  font-medium"
           />
 
-          <div className="flex lg:min-w-[40px]  items-center justify-start my-4 gap-3">
+          <div className="flex min-w-[40px]   items-center justify-start my-4 gap-3">
             {data.twitter && (
               <a
                 href={`https://x.com/${data.twitter}`}
