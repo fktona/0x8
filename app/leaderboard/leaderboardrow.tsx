@@ -77,7 +77,7 @@ export default function LeaderboardRow({
             className="text-[16px] lg:w-[60px] mr-8  font-medium"
           />
 
-          <div className="flex min-w-[40px]   items-center justify-start my-4 gap-3">
+          <div className="flex lg:min-w-[40px] min-w-[45px]   items-center justify-start my-4 gap-3">
             {data.twitter && (
               <a
                 href={`https://x.com/${data.twitter}`}
@@ -106,7 +106,7 @@ export default function LeaderboardRow({
           </div>
           <span className="text-[16px] lg:ml-[40px]">
             <span className="lg:hidden">
-              {data.wallet.slice(0, 7)}...{data.wallet.slice(-6)}
+              {data.wallet.slice(0, 4)}...{data.wallet.slice(-4)}
             </span>
             <span className="hidden lg:inline">{data.wallet}</span>
           </span>
