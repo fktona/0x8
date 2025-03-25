@@ -116,11 +116,11 @@ export default function LeaderboardRow({
       <div className="flex items-center gap-6">
         <div className=" text-[16px]">
           <span className="text-green-500">
-            {formatNumber2(data.pnlSummary.totalBuys.toString())}
+            {formatNumber2(data.pnlSummary.profitableTrades.toString())}
           </span>
           /
           <span className="text-red-500">
-            {formatNumber2(data.pnlSummary.totalSells.toString())}
+            {formatNumber2(data.pnlSummary.losingTrades.toString())}
           </span>
         </div>
 
