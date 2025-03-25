@@ -1,11 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import TradesList from "./trade-list";
 import { AlTransactionsProps } from "@/types";
 import { useTransactionsStore } from "@/store/store";
+import ProfileFilter from "../profile-file";
+import { set } from "zod";
+import { ArrowBigDown, ChevronDown, ChevronUp } from "lucide-react";
 
 export default function TradeComponents({}: {}) {
   const [activeTab, setActiveTab] = useState("All");
@@ -13,18 +16,43 @@ export default function TradeComponents({}: {}) {
   const [filteredUsers, setFilteredUsers] = useState<
     AlTransactionsProps[] | null
   >(usersTransactions);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredOutWallet, setFilteredOutWallet] = useState<string[]>([]);
+
+  const [openFilter, setOpenFilter] = useState(false);
 
   useEffect(() => {
-    setFilteredUsers(usersTransactions);
-  }, [usersTransactions]);
-
-  const handleSearch = (query: string) => {
+    // Filter out wallets that are in the filteredOutWallet array
     const filtered = usersTransactions?.filter(
-      (user) =>
-        user.wallet.toLowerCase()?.includes(query?.toLowerCase()) ||
-        user.name.toLowerCase()?.includes(query?.toLowerCase())
+      (user) => !filteredOutWallet.includes(user.wallet)
     );
     setFilteredUsers(filtered || []);
+  }, [usersTransactions, filteredOutWallet]);
+
+  const handleSearch = (query: string) => {
+    setFilteredOutWallet([]);
+    setSearchQuery(query);
+    const filtered = usersTransactions?.filter(
+      (user) =>
+        user.wallet.toLowerCase()?.includes(query?.toLowerCase().trim()) ||
+        user.name.toLowerCase()?.includes(query?.toLowerCase().trim())
+    );
+    setFilteredUsers(filtered || []);
+  };
+
+  const handleFilter = (wallet: string) => {
+    if (filteredOutWallet.includes(wallet)) {
+      // Remove wallet if already filtered out
+      setFilteredOutWallet(filteredOutWallet.filter((w) => w !== wallet));
+    } else {
+      // Add wallet to filtered out list
+      setFilteredOutWallet([...filteredOutWallet, wallet]);
+    }
+  };
+
+  const handleOpenFilter = () => {
+    setOpenFilter(!openFilter);
+    setSearchQuery("");
   };
 
   return (
@@ -82,6 +110,7 @@ export default function TradeComponents({}: {}) {
             <input
               type="text"
               placeholder="Enter wallet address or name"
+              value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               className="flex self-end lg:w-[538px] w-full h-[49px] p-[10px] flex-col justify-center items-center gap-[10px] rounded-[80px] bg-[rgba(12,12,12,0.93)]"
             />
@@ -93,7 +122,43 @@ export default function TradeComponents({}: {}) {
               className="absolute right-[20px] top-[20px]"
             />
           </motion.div>
+          <motion.div
+            initial={{ opacity: 0, width: "90%" }}
+            animate={{ opacity: 1, width: "100%" }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="ml-auto relative flex justify-end   w-full lg:w-[538px]"
+          >
+            <button
+              onClick={handleOpenFilter}
+              className="flex items-center gap-2 text-white justify-between lg:min-w-[140px] bg-[#323436] rounded-[10px] px-4 py-2 font-light"
+            >
+              {openFilter ? <ChevronUp /> : <ChevronDown />} Filter wallet
+            </button>
+          </motion.div>
         </motion.div>
+        <div className="w-full flex items-center justify-start lg:gap-[21px] my-[42px] gap-3 flex-wrap">
+          <AnimatePresence mode="sync">
+            {openFilter &&
+              usersTransactions?.map((trade, index) => (
+                <motion.div
+                  key={trade.wallet}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ delay: index * 0.05 }}
+                  className=" "
+                >
+                  <ProfileFilter
+                    wallet={trade.wallet}
+                    imageUrl={trade.imageUrl}
+                    onClick={() => handleFilter(trade.wallet)}
+                    name={trade.name}
+                    filteredOutWallet={filteredOutWallet}
+                  />
+                </motion.div>
+              ))}
+          </AnimatePresence>
+        </div>
 
         <AnimatePresence>
           <motion.div

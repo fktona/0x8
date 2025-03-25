@@ -5,7 +5,7 @@ async function Trade() {
   try {
     // const allTransactions = await getAllUsersTransactions();
     return (
-      <div className="w-full px-6 lg:px-[40px] min-h-svh">
+      <div className="w-full  lg:px-[40px] min-h-svh">
         <TradeComponents />
       </div>
     );

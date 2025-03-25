@@ -28,11 +28,7 @@ export default function AccountRow({ account, onDelete, index }: AccountProps) {
               className="rounded-full"
             />
           </ProfileLink>
-          <span className="font-medium lg:hidden w-[80px]">
-            {account.name.length > 7
-              ? `${account.name.substring(0, 7)}...`
-              : account.name}
-          </span>
+
           <TruncatedText
             text={account.name}
             forceTruncate
