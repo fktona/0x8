@@ -80,7 +80,7 @@ export function timeAgo(timestamp: string) {
     }
   }
 
-  return "Just now";
+  return `${seconds}s ago`;
 }
 
 export function formatNumber2(num: string): string {

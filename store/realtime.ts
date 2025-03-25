@@ -19,15 +19,25 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
 
   connect: () => {
     const socket = getSocket();
-
     // Listen for new transactions
     socket.on("onNewTransaction", (data: TransactionEvent) => {
       console.log("New transaction received:", data);
 
+      const formattedTransactions = data.content.transactions.map((tx) => ({
+        ...tx,
+        name: data.content.name,
+        wallet: data.content.wallet,
+        twitter: data.content.twitter,
+        telegram: data.content.telegram || null,
+        website: data.content.website || null,
+        chains: data.content.chains || [],
+        imageUrl: data.content.imageUrl || null,
+      })) as TradeTransaction[];
+
       set((state) => ({
-        newTransaction: data.content,
-        transactions: [data.content, ...state.transactions].slice(0, 100), // Keep last 100 transactions
-        latestTransaction: data.content,
+        newTransaction: formattedTransactions[0],
+        transactions: [formattedTransactions[0], ...state.transactions],
+        latestTransaction: formattedTransactions[0],
       }));
     });
 

@@ -33,7 +33,6 @@ export default function LeaderboardPage() {
         console.error("Error fetching leaderboard data", error);
         setError("Failed to load leaderboard data. Please try again later.");
       } finally {
-        console.log("finally");
       }
     });
   }, [activeTab, activePeriod]);

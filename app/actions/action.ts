@@ -42,12 +42,11 @@ async function uploadToCloudinary(imageData: FormData): Promise<string | null> {
     );
 
     if (!uploadResponse.ok) {
-      console.log(uploadResponse);
       throw new Error("Failed to upload image");
     }
 
     const data = await uploadResponse.json();
-    console.log("Cloudinary response:", data);
+
     return data.secure_url;
   } catch (error) {
     console.error("Error uploading to Cloudinary:", error);
@@ -83,7 +82,6 @@ export async function addAccount(
 
       // Upload to Cloudinary
       imageUrl = await uploadToCloudinary(imageFormData);
-      console.log("Image URL:", imageUrl);
     }
 
     // Validate form data
@@ -113,9 +111,6 @@ export async function addAccount(
       chains: validatedFields.data.chains || [],
     };
 
-    // In a real app, you would send this payload to your backend API
-    console.log("Account payload:", payload);
-
     // Example API call (uncomment and modify as needed)
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}user`, {
       method: "POST",
@@ -131,7 +126,6 @@ export async function addAccount(
     console.log("API response:", response);
 
     if (!response.ok) {
-      console.log(response);
       throw new Error("Failed to add account");
     }
 

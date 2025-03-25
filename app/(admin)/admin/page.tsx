@@ -10,7 +10,6 @@ async function Admin() {
     });
 
     const users = await response.json();
-    console.log(users);
 
     return <AdminDashboardPage users={users} />;
   } catch (error) {

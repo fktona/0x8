@@ -35,6 +35,17 @@ export type UserProfile = {
   imageUrl: string;
 };
 
+export type IndividualTransaction = {
+  name: string;
+  wallet: string;
+  twitter: string;
+  telegram: string;
+  website: string;
+  chains: string[];
+  imageUrl: string;
+  transactions: TradeTransaction[];
+};
+
 export interface AlTransactionsProps extends UserProfile {
   transactions: TradeTransaction[];
 }
@@ -101,7 +112,7 @@ export type CryptoData = {
 };
 export interface TransactionEvent {
   msg: string;
-  content: TradeTransaction;
+  content: IndividualTransaction;
 }
 
 export type GroupedTransactions = {
