@@ -102,16 +102,35 @@ export default function TokenPanel({
 
       {/* Transactions */}
       <div>
-        {buydata.map((tx, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: index * 0.05 }}
-          >
-            <TokenTransaction data={tx} sellData={selldata} />
-          </motion.div>
-        ))}
+        {buydata.length > 0
+          ? buydata.map((tx, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <TokenTransaction
+                  data={tx}
+                  sellData={selldata}
+                  usedSellData={false}
+                />
+              </motion.div>
+            ))
+          : selldata.map((tx, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <TokenTransaction
+                  data={tx}
+                  sellData={selldata}
+                  usedSellData={true}
+                />
+              </motion.div>
+            ))}
       </div>
     </motion.div>
   );

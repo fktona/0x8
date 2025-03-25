@@ -1,7 +1,7 @@
 import type React from "react";
 import Image from "next/image";
 import { cn } from "@/libs/utils";
-import { Link } from "lucide-react";
+import Link from "next/link";
 
 // Define the type for our feature cards
 interface FeatureCard {

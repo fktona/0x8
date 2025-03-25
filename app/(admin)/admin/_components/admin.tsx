@@ -21,8 +21,10 @@ export default function AdminDashboardPage({
   const [filteredUsers, setFilteredUsers] = useState<UserProfile[]>(users);
 
   const handleSearch = (query: string) => {
-    const filtered = users.filter((user) =>
-      user.wallet.toLowerCase().includes(query.toLowerCase())
+    const filtered = users.filter(
+      (user) =>
+        user.wallet.toLowerCase().includes(query.toLowerCase().trim()) ||
+        user.name.toLowerCase().includes(query.toLowerCase().trim())
     );
     setFilteredUsers(filtered);
   };
@@ -89,16 +91,18 @@ export default function AdminDashboardPage({
                     setSearchQuery(e.target.value);
                     handleSearch(e.target.value);
                   }}
+                  id="search"
                   className="flex lg:w-[538px] w-full h-[38px] p-[10px] flex-col justify-center items-center gap-[10px] rounded-[80px] bg-[rgba(12,12,12,0.93)]"
                 />
-
-                <Image
-                  src="/searchIcon.svg"
-                  alt="search"
-                  width={16}
-                  height={16}
-                  className="absolute right-[20px] top-[20px]"
-                />
+                <label htmlFor="search" className="">
+                  <Image
+                    src="/searchIcon.svg"
+                    alt="search"
+                    width={16}
+                    height={16}
+                    className="absolute right-[20px] top-[10px]"
+                  />
+                </label>
               </div>
               <Link href="/admin/add-account">
                 <button className="flex items-center gap-2 bg-white text-black rounded-full px-4 py-2 font-medium">

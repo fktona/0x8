@@ -10,12 +10,14 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
+      setLoading(true);
       const response = await fetch("/api/admin/login", {
         method: "POST",
         headers: {
@@ -32,6 +34,8 @@ export default function AdminLoginPage() {
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,12 +78,12 @@ export default function AdminLoginPage() {
                 required
               />
             </div>
-
             <button
               type="submit"
-              className="w-full py-3 rounded-full bg-[#FFD238] text-black font-medium hover:bg-[#ffca38] transition-colors"
+              disabled={loading}
+              className="w-full py-3 rounded-full bg-[#FFD238] text-black font-medium hover:bg-[#ffca38] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Login
+              {loading ? "Signing in..." : "Login"}
             </button>
           </form>
         </div>

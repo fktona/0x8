@@ -19,4 +19,6 @@ async function Admin() {
   }
 }
 
+export const revaildate = 0;
+
 export default Admin;

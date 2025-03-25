@@ -92,7 +92,6 @@ export async function addAccount(
       wallet,
       twitter,
       telegram,
-      imageUrl,
       chains,
     });
 
@@ -217,7 +216,6 @@ export async function EditAccount(
       wallet,
       twitter,
       telegram,
-
       chains,
     });
 

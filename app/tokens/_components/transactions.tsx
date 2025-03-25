@@ -73,9 +73,11 @@ import { UserTransactionSummary } from "@/types";
 export default function TokenTransaction({
   data,
   sellData,
+  usedSellData,
 }: {
   data: UserTransactionSummary;
   sellData: UserTransactionSummary[];
+  usedSellData: boolean;
 }) {
   const { transactions } = useTransactionsStore();
 
@@ -112,17 +114,23 @@ export default function TokenTransaction({
       </div>
       <div className="text-red-500 flex flex-col gap-1 items-center">
         <span>
-          {formatNumber(
-            sellData.find((o) => o.wallet === data.wallet)?.totalTokenOutAmount
-          ) || 0}
+          {!usedSellData
+            ? formatNumber(
+                sellData.find((o) => o.wallet === data.wallet)
+                  ?.totalTokenOutAmount
+              )
+            : formatNumber(data.totalTokenInAmount) || 0}
           <span className="text-yellow-500 ml-1 uppercase  gap-1">
             {data?.chain == "bsc" ? "BNB" : "ETH"}
           </span>
         </span>
         <span className="text-12px] text-white/60">
-          {formatNumber(
-            sellData.find((o) => o.wallet === data.wallet)?.totalTokenInAmount
-          ) || 0}
+          {!usedSellData
+            ? formatNumber(
+                sellData.find((o) => o.wallet === data.wallet)
+                  ?.totalTokenInAmount
+              )
+            : formatNumber(data.totalTokenOutAmount) || 0}
         </span>
       </div>
       <div className="text-gray-400">

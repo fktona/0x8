@@ -95,7 +95,7 @@ export default function EditAccountPage({
       <div className="flex-grow flex flex-col items-center px-4 py-6">
         <div className="w-full max-w-md">
           <h1 className="text-[24px] lg:text-[38px] font-bold font-aktiv-bold text-center mb-10">
-            Add account
+            Edit Account
           </h1>
 
           <form ref={formRef} action={formAction} className="space-y-4">

@@ -24,7 +24,7 @@ function Navbar() {
   };
 
   return (
-    <div className="overflow-hidden bg-black uppercase">
+    <div className="overflow-hidden bg-black uppercase relative z-[500]">
       {/* Desktop Navbar */}
       <div className="hidden md:flex w-full backdrop-blur-md py-[13px] /15 px-6 lg:px-[40px] font-aktiv-regular justify-between items-center fixed top-0 left-0 right-0 z-50">
         <div className="flex items-center gap-8">
@@ -34,26 +34,42 @@ function Navbar() {
             </h1>
           </Link>
           <ul className="flex gap-3 overflow-x-auto w-max">
-            <li className="px-2 py-1 min-w-[150px] lg:min-w-[180px] text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-              <Image src="/eth.svg" alt={"eth"} width={20} height={20} />
-              <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
-              <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
-              <Image src={"/eth-gas.svg"} alt="gas" width={20} height={20} />
-              <p>{formatNumber(tokenDetails?.data?.eth?.gas)} Gwei</p>
-            </li>
-
-            <li className="px-2 py-1 min-w-[150px] lg:min-w-[180px] text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-              <Image src="/bsc.svg" alt={"bsc"} width={20} height={20} />
-              <span>{formatNumber(tokenDetails?.data?.bnb?.price)}</span>
-              <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
-              <Image src={"/bnb-gas.svg"} alt="gas" width={20} height={20} />
-              <p>{formatNumber(tokenDetails?.data?.bnb?.gas)} Gwei</p>
-            </li>
-
-            <li className="px-2 py-1 text-xs min-w-[100px] lg:min-w-[100px] rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-              <Image src="/base.svg" alt={"base"} width={24} height={24} />
-              <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
-            </li>
+            <a
+              href="https://dexscreener.com/ethereum"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <li className="px-2 py-1 min-w-[150px] lg:min-w-[180px] text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                <Image src="/eth.svg" alt={"eth"} width={20} height={20} />
+                <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+                <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+                <Image src={"/eth-gas.svg"} alt="gas" width={20} height={20} />
+                <p>{formatNumber(tokenDetails?.data?.eth?.gas)} Gwei</p>
+              </li>
+            </a>
+            <a
+              href="https://dexscreener.com/bsc"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <li className="px-2 py-1 min-w-[150px] lg:min-w-[180px] text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                <Image src="/bsc.svg" alt={"bsc"} width={20} height={20} />
+                <span>{formatNumber(tokenDetails?.data?.bnb?.price)}</span>
+                <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+                <Image src={"/bnb-gas.svg"} alt="gas" width={20} height={20} />
+                <p>{formatNumber(tokenDetails?.data?.bnb?.gas)} Gwei</p>
+              </li>
+            </a>
+            <a
+              href="https://dexscreener.com/base"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <li className="px-2 py-1 text-xs min-w-[100px] lg:min-w-[100px] rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                <Image src="/base.svg" alt={"base"} width={24} height={24} />
+                <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+              </li>
+            </a>
           </ul>
         </div>
         <ul className="flex gap-4 items-center">
@@ -108,7 +124,7 @@ function Navbar() {
       </div>
 
       {/* Mobile Navbar */}
-      <div className="md:hidden w-full  fixed top-0 left-0 right-0 z-50">
+      <div className="md:hidden bg-black w-full  fixed top-0 left-0 right-0 z-50">
         <div className="flex justify-between items-center px-4 py-3 border-b border-gray-800">
           <Link href="/">
             <div className="flex items-center gap-2">

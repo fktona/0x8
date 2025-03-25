@@ -1,4 +1,5 @@
 "use client";
+import TruncatedText from "@/components/forced-trucate";
 import ProfileLink from "@/components/profile-link";
 import { copyToClipboard } from "@/libs/utils";
 import { UserProfile } from "@/types";
@@ -32,7 +33,12 @@ export default function AccountRow({ account, onDelete, index }: AccountProps) {
               ? `${account.name.substring(0, 7)}...`
               : account.name}
           </span>
-          <span className="font-medium  w-[80px]">{account.name}</span>
+          <TruncatedText
+            text={account.name}
+            forceTruncate
+            maxLength={12}
+            className="font-medium  w-[80px]"
+          ></TruncatedText>
 
           <div className="min-w-[10px]  flex  mx-4 items-center justify-center gap-2">
             {account.twitter && (
