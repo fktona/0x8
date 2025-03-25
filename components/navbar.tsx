@@ -24,7 +24,7 @@ function Navbar() {
   };
 
   return (
-    <div className="overflow-hidden uppercase">
+    <div className="overflow-hidden bg-black uppercase">
       {/* Desktop Navbar */}
       <div className="hidden md:flex w-full backdrop-blur-md py-[13px] /15 px-6 lg:px-[40px] font-aktiv-regular justify-between items-center fixed top-0 left-0 right-0 z-50">
         <div className="flex items-center gap-8">

@@ -26,7 +26,7 @@ export default function LeaderboardRow({
   else if (rank === 2) bgColor = "rank2";
   else if (rank === 3) bgColor = "rank3";
 
-  const win = data.pnlSummary.totalPnlPercentage > 0;
+  const win = data.pnlSummary.totalPnlPercentage >= 0;
   const winLoss = win ? "Win" : "Loss";
 
   return (
@@ -159,8 +159,13 @@ export default function LeaderboardRow({
                 : "text-red-500 text-[16px]"
             }
           >
-            {"("}${formatNumber2(data.pnlSummary.baseTokenGainUSD)}
-            {")"}
+            {"(" +
+              (data.pnlSummary.baseTokenGainUSD.startsWith("-") ? "-" : "") +
+              "$" +
+              (formatNumber2(data.pnlSummary.baseTokenGainUSD).startsWith("-")
+                ? formatNumber2(data.pnlSummary.baseTokenGainUSD).substring(1)
+                : formatNumber2(data.pnlSummary.baseTokenGainUSD)) +
+              ")"}
           </span>
         </div>
       </div>

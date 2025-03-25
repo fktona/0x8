@@ -189,12 +189,13 @@ function Trade() {
     const topTransactions: Transaction[] = Object.values(walletGroups).flatMap(
       (transactions) =>
         transactions
+          .slice(0, 100)
           .sort(
             (a, b) =>
               new Date(b.blockTimestamp).getTime() -
               new Date(a.blockTimestamp).getTime()
           ) // Sort by newest timestamp first
-          .slice(0, topN) // Take top N
+      // Take top N
     );
 
     // Final sorting across all wallets by blockTimestamp (newest first)
