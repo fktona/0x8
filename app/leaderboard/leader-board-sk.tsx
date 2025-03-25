@@ -1,6 +1,6 @@
 export default function LeaderboardRowSkeleton() {
   return (
-    <div className="flex items-center flex-wrap gap-3.5 justify-between p-3 border border-[#1F1F1F] text-white/80 rounded-[13px] bg-black animate-pulse">
+    <div className="flex items-center flex-wrap gap-3.5 justify-between p-3 border border-[#1F1F1F] text-white/80 rounded-[13px]  animate-pulse">
       <div className="flex items-center gap-3">
         {/* Rank placeholder */}
         <div className="w-6 h-6 bg-[#2A2A2A] rounded-full"></div>

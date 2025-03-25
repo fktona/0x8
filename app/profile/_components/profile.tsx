@@ -413,7 +413,7 @@ export default function ProfilePage({
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow p-4 text-[18px] font-aktiv-regular  grid grid-cols-1 lg:grid-cols-7 gap-6 px-5 lg:px-[80px]">
+      <div className="flex-grow p-4 text-[18px] max-w-[2560px] w-full mx-auto font-aktiv-regular  grid grid-cols-1 lg:grid-cols-7 gap-6 px-5 lg:px-[80px]">
         {/* Top Holdings */}
         <div className="bg-[#0C0C0C]  lg:h-[390px] h-[320px]  w-full  border border-white/10 rounded-lg lg:col-span-3 overflow-hidden">
           <div className="flex items-center py-[17.11px] justify-between p-3 border-b border-white/10">
@@ -466,11 +466,13 @@ export default function ProfilePage({
       </div>
 
       {/* Token PNL Section */}
-      <div className="p-4">
-        <div className="bg-[#111] border border-white/10  rounded-lg overflow-hidden mb-6">
-          <div className="flex font-aktiv-regular text-[16px] items-center py-[12px] justify-between p-3 border-b border-white/10">
-            <div className="flex items-center gap-4">
-              <h3 className="font-aktiv-regular">Token PNL</h3>
+      <div className="p-4 max-w-[2560px] mx-auto">
+        <div className="bg-[#111] border border-white/10  rounded-lg overflow-hidden mb-6  ">
+          <div className="flex font-aktiv-regular flex-col gap-1 lg:flex-row text-[16px] items-center py-[12px] justify-between p-3 border-b border-white/10">
+            <div className="flex  items-center gap-4">
+              <h3 className="font-aktiv-regular text-[12px] lg:text-[16px]">
+                Token PNL
+              </h3>
               <div className="flex items-center gap-2 relative">
                 <>
                   <button
@@ -500,7 +502,7 @@ export default function ProfilePage({
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center text-[12px] lg:text-[16px] gap-1 lg:gap-4">
               <div className="flex items-center gap-2">
                 <span className="text-green-500">
                   {totalBuysAndSells?.totalBuys}
@@ -543,7 +545,7 @@ export default function ProfilePage({
           </div>
 
           {/* Token PNL Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 px-[8px] py-[10px] gap-x-[11px] gap-y-[15px]">
+          <div className="2xl:grid-cols-4 [1920px]:grid-cols-5 grid grid-cols-1 md:grid-cols-3 px-[8px] py-[10px] gap-x-[11px] gap-y-[15px]">
             {pnlIsLoading
               ? Array(6)
                   .fill(null)

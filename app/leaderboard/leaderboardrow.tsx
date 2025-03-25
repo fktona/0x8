@@ -21,7 +21,7 @@ export default function LeaderboardRow({
   activeTab: string;
 }) {
   // Determine background color based on rank
-  let bgColor = "bg-black";
+  let bgColor = "";
   if (rank === 1) bgColor = "rank1";
   else if (rank === 2) bgColor = "rank2";
   else if (rank === 3) bgColor = "rank3";
@@ -128,6 +128,7 @@ export default function LeaderboardRow({
           }
         >
           <span className="">
+            {win && "+"}
             {formatNumber2(data.pnlSummary.baseTokenGain)}
             {""}
             <span className="ml-1">

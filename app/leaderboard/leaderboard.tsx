@@ -46,7 +46,7 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <div className="min-h-screen max-w-[1200px] mx-auto bg-black text-white">
+    <div className="min-h-screen max-w-[1200px] mx-auto  text-white">
       {/* Leaderboard Section */}
       <div className="p-4 ">
         <div className="flex lg:items-center lg:gap-2 mb-4 flex-col lg:flex-row  lg:justify-between  ">

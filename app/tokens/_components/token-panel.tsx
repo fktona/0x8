@@ -1,11 +1,12 @@
 import { TokenPanelProps } from "./tokens";
 import TokenTransaction from "./transactions";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import TokenPanelSkeleton from "./skeleton";
-import { formatNumber } from "@/libs/utils";
+import { extractsTrade, formatNumber } from "@/libs/utils";
 import DexLink from "@/components/dex-link";
+import { TradeTransaction } from "@/types";
 
 interface PanelProps {
   tokenName: string;
@@ -23,6 +24,23 @@ export default function TokenPanel({
   isLoading = false,
 }: PanelProps) {
   const [showSkeleton, setShowSkeleton] = useState(isLoading);
+
+  const filterAndExtractBuyData = useCallback(() => {
+    return extractsTrade(data.filter((o) => o.type == "buy"));
+  }, [data]);
+
+  const filterAndExtractSellData = useCallback(() => {
+    return extractsTrade(data.filter((o) => o.type == "sell"));
+  }, [data]);
+
+  const buydata = useMemo(
+    () => filterAndExtractBuyData(),
+    [filterAndExtractBuyData, data]
+  );
+  const selldata = useMemo(
+    () => filterAndExtractSellData(),
+    [filterAndExtractSellData, data]
+  );
 
   useEffect(() => {
     // If it's no longer loading, wait a bit before hiding skeleton for smooth transition
@@ -78,20 +96,20 @@ export default function TokenPanel({
       <div className="grid grid-cols-4 text-xs text-gray-400 p-2">
         <div>Traders</div>
         <div>Bought</div>
-        <div>Got</div>
+        <div>Sell</div>
         <div>Time</div>
       </div>
 
       {/* Transactions */}
       <div>
-        {data.map((tx, index) => (
+        {buydata.map((tx, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: index * 0.05 }}
           >
-            <TokenTransaction {...tx} />
+            <TokenTransaction data={tx} sellData={selldata} />
           </motion.div>
         ))}
       </div>

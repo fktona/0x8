@@ -158,3 +158,17 @@ export type ExtendedTokenTradeSummary = {
   avgBuyTimeSeconds: number; // Average buy time in seconds
   avgSellTimeSeconds: number; // A
 };
+
+export type UserTransactionSummary = {
+  wallet: string;
+  totalTokenInAmount: number;
+  totalTokenOutAmount: number;
+  lastTransactionTimestamp: string;
+  imageUrl: string;
+  name: string;
+  tokenInSymbol: string;
+  tokenOutSymbol: string;
+  chain: string;
+  // tokenInName: string;
+  // tokenInName: string;
+};

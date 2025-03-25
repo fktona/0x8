@@ -1,6 +1,7 @@
 import type React from "react";
 import Image from "next/image";
 import { cn } from "@/libs/utils";
+import { Link } from "lucide-react";
 
 // Define the type for our feature cards
 interface FeatureCard {
@@ -18,7 +19,7 @@ const featureCards: FeatureCard[] = [
     title: "Track Trades from Leading Wallets",
     description:
       "Gain a competitive edge by monitoring real-time trades from the most successful and influential wallets to make smarter investment decisions.",
-    backgroundClass: "!bg-black",
+    backgroundClass: "!",
     hasImage: true,
     imageUrl: "/diamond.png",
   },
@@ -37,7 +38,7 @@ const featureCards: FeatureCard[] = [
     title: "Examine Top Performing Wallets",
     description:
       "Dive into the strategies of high-performing wallets to uncover insights, track winning moves, and refine your own trading approach.",
-    backgroundClass: "!bg-black",
+    backgroundClass: "!",
     hasImage: true,
     imageUrl: "/diamond.png",
   },
@@ -57,9 +58,11 @@ export const TraderPlatform: React.FC = () => {
             commodo ligula eget dolor. Aenean massa.
           </p>
         </div>
-        <button className="bg-white hidden md:block text-black px-6 lg:px-[58px] lg:py-[21px] py-2 text-[16px] rounded-full font-medium hover:bg-gray-200 transition-colors">
-          Explore
-        </button>
+        <Link href="/tokens">
+          <button className="bg-white hidden md:block text-black px-6 lg:px-[58px] lg:py-[21px] py-2 text-[16px] rounded-full font-medium hover:bg-gray-200 transition-colors">
+            Explore
+          </button>
+        </Link>
       </div>
 
       <div className="flex  justify-center  items-center flex-col max-w-screen-2xl mx-auto lg:flex-row gap-[33px]">

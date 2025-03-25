@@ -1,4 +1,5 @@
-import { TradeTransaction } from "@/types";
+import { TokenPanelProps } from "@/app/tokens/_components/tokens";
+import { TradeTransaction, UserTransactionSummary } from "@/types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -131,3 +132,51 @@ export const removeWrapped = (str: string | undefined) => {
   str == "WBNB" ? (str = "BNB") : str;
   return str;
 };
+
+export function extractsTrade(
+  transactions: TokenPanelProps[]
+): UserTransactionSummary[] {
+  const userMap = new Map();
+
+  transactions.forEach((tx: TokenPanelProps) => {
+    const {
+      wallet,
+      tokenInAmount,
+      tokenOutAmount,
+      imageUrl,
+      name,
+      blockTimestamp,
+      tokenInSymbol,
+      tokenOutSymbol,
+      chain,
+    } = tx;
+    const tokenIn = parseFloat(tokenInAmount) || 0;
+    const tokenOut = Math.abs(parseFloat(tokenOutAmount)) || 0;
+
+    if (!userMap.has(wallet)) {
+      userMap.set(wallet, {
+        imageUrl,
+        name,
+        wallet,
+        totalTokenInAmount: 0,
+        totalTokenOutAmount: 0,
+        lastTransactionTimestamp: blockTimestamp,
+        tokenInSymbol,
+        tokenOutSymbol,
+        chain,
+      });
+    }
+
+    const userData = userMap.get(wallet);
+    userData.totalTokenInAmount += tokenIn;
+    userData.totalTokenOutAmount += tokenOut;
+
+    if (
+      new Date(blockTimestamp) > new Date(userData.lastTransactionTimestamp)
+    ) {
+      userData.lastTransactionTimestamp = blockTimestamp;
+    }
+  });
+
+  return Array.from(userMap.values());
+}

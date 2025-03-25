@@ -15,7 +15,7 @@ export default function LoadingState({
   isLoading: boolean;
 }) {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen  text-white">
       {/* Realtime Token Section */}
       <div className="p-4">
         <div className="flex lg:items-center lg:gap-2 mb-4 flex-col lg:flex-row gap-[28px]">
@@ -107,7 +107,7 @@ export default function LoadingState({
               <span className="text-[16px] text-white/80">Low caps</span>
               <div className="flex items-center gap-1">
                 <Image
-                  src={`${activeTab.toLocaleLowerCase()}.svg`}
+                  src={`/${activeTab.toLocaleLowerCase()}.svg`}
                   alt={activeTab}
                   width={30}
                   height={30}
@@ -124,7 +124,7 @@ export default function LoadingState({
               <span className="text-[16px] text-white/80">$100k+</span>
               <div className="flex items-center gap-1">
                 <Image
-                  src={`${activeTab.toLocaleLowerCase()}.svg`}
+                  src={`/${activeTab.toLocaleLowerCase()}.svg`}
                   alt={activeTab}
                   width={30}
                   height={30}
@@ -141,14 +141,14 @@ export default function LoadingState({
               <span className="text-[16px] text-white/80">$1M+</span>
               <div className="flex items-center gap-1">
                 <Image
-                  src={`${activeTab.toLocaleLowerCase()}.svg`}
+                  src={`/${activeTab.toLocaleLowerCase()}.svg`}
                   alt={activeTab}
                   width={30}
                   height={30}
                   className="rounded-full"
                 />
                 <span className="text-sm">{activeTab}</span>
-                <span className="text-sm">BNB</span>
+                {/* <span className="text-sm">BNB</span> */}
               </div>
             </div>
             {renderSkeletons(3)}

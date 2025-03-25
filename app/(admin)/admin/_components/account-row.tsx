@@ -13,7 +13,7 @@ interface AccountProps {
 
 export default function AccountRow({ account, onDelete, index }: AccountProps) {
   return (
-    <div className="flex flex-wrap items-center justify-between p-3 text-sm md:text-[18px] text-white/80 rounded-lg bg-black border border-white/10 gap-y-2">
+    <div className="flex flex-wrap items-center justify-between p-3 text-sm md:text-[18px] text-white/80 rounded-lg  border border-white/10 gap-y-2">
       {/* Left Section */}
       <div className="flex items-center min-w-[50%] justify-between relative   gap-6 flex-wrap">
         <div className="flex items-center gap-2 text-start justify-start w-full flex-wrap">

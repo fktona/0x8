@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn, formatNumber } from "@/libs/utils";
 import { TopInfo } from "@/app/actions/action";
 import { CryptoData } from "@/types";
+import DexLink from "./dex-link";
 
 function Navbar() {
   const path = usePathname();
@@ -23,9 +24,9 @@ function Navbar() {
   };
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden uppercase">
       {/* Desktop Navbar */}
-      <div className="hidden md:flex w-full backdrop-blur-md py-[13px] bg-black/15 px-6 lg:px-[40px] font-aktiv-regular justify-between items-center fixed top-0 left-0 right-0 z-50">
+      <div className="hidden md:flex w-full backdrop-blur-md py-[13px] /15 px-6 lg:px-[40px] font-aktiv-regular justify-between items-center fixed top-0 left-0 right-0 z-50">
         <div className="flex items-center gap-8">
           <Link href="/">
             <h1 className="text-[32px] tracking-[0%] flex items-center gap-2">
@@ -107,7 +108,7 @@ function Navbar() {
       </div>
 
       {/* Mobile Navbar */}
-      <div className="md:hidden w-full bg-black fixed top-0 left-0 right-0 z-50">
+      <div className="md:hidden w-full  fixed top-0 left-0 right-0 z-50">
         <div className="flex justify-between items-center px-4 py-3 border-b border-gray-800">
           <Link href="/">
             <div className="flex items-center gap-2">
@@ -144,70 +145,113 @@ function Navbar() {
             <div className="infinite-scroll-content flex">
               {/* First copy of items */}
               <ul className="flex gap-2 min-w-max">
-                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-                  <Image src="/eth.svg" alt={"eth"} width={20} height={20} />
-                  <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
-                  <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
-                  <Image
-                    src={"/eth-gas.svg"}
-                    alt="gas"
-                    width={20}
-                    height={20}
-                  />
-                  <p>{formatNumber(tokenDetails?.data?.eth?.gas)} Gwei</p>
-                </li>
+                <a
+                  href="https://dexscreener.com/ethereum"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                    <Image src="/eth.svg" alt={"eth"} width={20} height={20} />
+                    <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+                    <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+                    <Image
+                      src={"/eth-gas.svg"}
+                      alt="gas"
+                      width={20}
+                      height={20}
+                    />
+                    <p>{formatNumber(tokenDetails?.data?.eth?.gas)} Gwei</p>
+                  </li>
+                </a>
 
-                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-                  <Image src="/bsc.svg" alt={"bsc"} width={20} height={20} />
-                  <span>{formatNumber(tokenDetails?.data?.bnb?.price)}</span>
-                  <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
-                  <Image
-                    src={"/bnb-gas.svg"}
-                    alt="gas"
-                    width={20}
-                    height={20}
-                  />
-                  <p>{formatNumber(tokenDetails?.data?.bnb?.gas)} Gwei</p>
-                </li>
-
-                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-                  <Image src="/base.svg" alt={"base"} width={24} height={24} />
-                  <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
-                </li>
+                <a
+                  href="https://dexscreener.com/bsc"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                    <Image src="/bsc.svg" alt={"bsc"} width={20} height={20} />
+                    <span>{formatNumber(tokenDetails?.data?.bnb?.price)}</span>
+                    <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+                    <Image
+                      src={"/bnb-gas.svg"}
+                      alt="gas"
+                      width={20}
+                      height={20}
+                    />
+                    <p>{formatNumber(tokenDetails?.data?.bnb?.gas)} Gwei</p>
+                  </li>
+                </a>
+                <a
+                  href="https://dexscreener.com/base"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                    <Image
+                      src="/base.svg"
+                      alt={"base"}
+                      width={24}
+                      height={24}
+                    />
+                    <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+                  </li>
+                </a>
               </ul>
 
               {/* Duplicate copy for seamless scrolling */}
               <ul className="flex gap-2 min-w-max">
-                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-                  <Image src="/eth.svg" alt={"eth"} width={20} height={20} />
-                  <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
-                  <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
-                  <Image
-                    src={"/eth-gas.svg"}
-                    alt="gas"
-                    width={20}
-                    height={20}
-                  />
-                  <p>{formatNumber(tokenDetails?.data?.eth?.gas)} Gwei</p>
-                </li>
-
-                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-                  <Image src="/bsc.svg" alt={"bsc"} width={20} height={20} />
-                  <span>{formatNumber(tokenDetails?.data?.bnb?.price)}</span>
-                  <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
-                  <Image
-                    src={"/bnb-gas.svg"}
-                    alt="gas"
-                    width={20}
-                    height={20}
-                  />
-                  <p>{formatNumber(tokenDetails?.data?.bnb?.gas)} Gwei</p>
-                </li>
-
-                <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
-                  <Image src="/base.svg" alt={"base"} width={24} height={24} />
-                  <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
-                </li>
+                <a
+                  href="https://dexscreener.com/ethereum"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                    <Image src="/eth.svg" alt={"eth"} width={20} height={20} />
+                    <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+                    <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+                    <Image
+                      src={"/eth-gas.svg"}
+                      alt="gas"
+                      width={20}
+                      height={20}
+                    />
+                    <p>{formatNumber(tokenDetails?.data?.eth?.gas)} Gwei</p>
+                  </li>
+                </a>
+                <a
+                  href="https://dexscreener.com/bsc"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                    <Image src="/bsc.svg" alt={"bsc"} width={20} height={20} />
+                    <span>{formatNumber(tokenDetails?.data?.bnb?.price)}</span>
+                    <div className="bg-[#424242] w-[1px] h-full mx-2"></div>
+                    <Image
+                      src={"/bnb-gas.svg"}
+                      alt="gas"
+                      width={20}
+                      height={20}
+                    />
+                    <p>{formatNumber(tokenDetails?.data?.bnb?.gas)} Gwei</p>
+                  </li>
+                </a>
+                <a
+                  href="https://dexscreener.com/base"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <li className="px-2 py-1 text-xs rounded-full bg-white/[0.08] flex justify-center gap-2 items-center">
+                    <Image
+                      src="/base.svg"
+                      alt={"base"}
+                      width={24}
+                      height={24}
+                    />
+                    <span>{formatNumber(tokenDetails?.data?.eth?.price)}</span>
+                  </li>
+                </a>
               </ul>
             </div>
           </div>
@@ -215,18 +259,21 @@ function Navbar() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="bg-black/95 absolute top-[88px] left-0 right-0 border-t border-gray-800 py-4">
+          <div className=" absolute top-[88px] left-0 right-0 border-t bg-black  border-gray-800 py-4">
             <ul className="flex flex-col gap-4 px-6">
               {["/trades", "/tokens", "/leaderboard"].map((route, index) => (
-                <li
-                  key={index}
-                  className={cn(
-                    "text-[16px] px-4 py-2 rounded-full",
-                    path === route ? "bg-[#6E88EC] text-black" : "text-white"
-                  )}
-                >
-                  <Link href={route}>{route.replace("/", "")}</Link>
-                </li>
+                <Link href={route}>
+                  <li
+                    key={index}
+                    className={cn(
+                      "text-[16px] px-4 py-2 rounded-full",
+                      path === route ? "bg-[#6E88EC] text-black" : "text-white"
+                    )}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {route.replace("/", "")}
+                  </li>
+                </Link>
               ))}
             </ul>
           </div>

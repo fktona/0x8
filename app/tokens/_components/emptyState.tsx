@@ -20,7 +20,7 @@ export default function EmptyState({
   setIsLoading: (value: boolean) => void;
 }) {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen  text-white">
       {/* Realtime Token Section */}
       <div className="p-4">
         <div className="flex lg:items-center lg:gap-2 mb-4 flex-col lg:flex-row gap-[28px]">
@@ -112,7 +112,7 @@ export default function EmptyState({
               className="absolute inset-2 bg-gradient-to-r from-green-500/30 to-blue-500/30 rounded-full animate-pulse"
               style={{ animationDuration: "2.5s", animationDelay: "0.2s" }}
             ></div>
-            <div className="absolute inset-4 bg-black rounded-full flex items-center justify-center">
+            <div className="absolute inset-4  rounded-full flex items-center justify-center">
               <svg
                 className="w-16 h-16 text-gray-400"
                 fill="none"

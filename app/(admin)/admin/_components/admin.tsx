@@ -62,7 +62,7 @@ export default function AdminDashboardPage({
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen  text-white flex flex-col">
       {/* Gradient Background */}
       <div className="flex-grow flex flex-col gap-5 relative ">
         <div className="w-full inset-0  bgg2 z-0 h-[191px] flex items-center justify-center">

@@ -31,7 +31,7 @@ export default function TradeComponents({}: {}) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="bg-black text-white"
+      className=" text-white"
     >
       <div className="p-4 lg:py-[38px] py-[20px]">
         <motion.div

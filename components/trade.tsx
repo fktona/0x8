@@ -45,7 +45,7 @@ const TradeBox = ({
 }) => {
   console.log(data, "data");
   return (
-    <div className="border md:h-[390px] flex flex-col h-[320px]  border-white/10 rounded-[12px] py-[17px] md:px-[12px] px-[10px] bg-black/40 w-full">
+    <div className="border md:h-[390px] flex flex-col h-[320px]  border-white/10 rounded-[12px] py-[17px] md:px-[12px] px-[10px] /40 w-full">
       <div className="text-white/80 relative font-light w-full text-[11px] lg:text-[14px] flex justify-between items-center pb-[17px] border-b border-white/10">
         <h4 className="flex items-center capitalize text-[14px] lg:text-[16px]  lg:gap-2 gap-1 w-full  justify-between">
           Recent trades
@@ -262,7 +262,7 @@ function Trade() {
           </button>
         </Link>
       </div>
-      <div className="flex flex-col   md:flex-row gap-4 w-full bg-black ">
+      <div className="flex flex-col   md:flex-row gap-4 w-full  ">
         <TradeBox
           chain="bsc"
           loading={isLoading}

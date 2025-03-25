@@ -71,7 +71,7 @@ export default function TokensComponents() {
   const newTokenAddressess = useMemo(
     () => removeDuplicates(tokenAddressess),
     [tokenAddressess]
-  ).slice(0, 5);
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [tokenMetaDatas, setTokenMetaDatas] = useState<TokenMetaData[]>([]);
   const [initialFetch, setInitialFetch] = useState(false);
@@ -320,7 +320,7 @@ export default function TokensComponents() {
     );
   }
   return (
-    <div className="min-h-screen bg-black text-white ">
+    <div className="min-h-screen  text-white ">
       {/* Realtime Token Section */}
       <div className="p-4">
         <div className="flex lg:items-center lg:gap-2 mb-4 flex-col lg:flex-row gap-[28px]">
@@ -427,7 +427,7 @@ export default function TokensComponents() {
               disabled={isLoading}
               value={searchQuery}
               placeholder="Enter Token Name / Address / Symbol or wallet address"
-              className="flex lg:w-[538px] w-full h-[49px] p-[10px]  flex-col justify-center items-center gap-[10px] rounded-[80px] bg-[rgba(12,12,12,0.93)]"
+              className="flex lg:w-[538px] w-full h-[49px] p-[10px] text-[12px]  flex-col justify-center items-center gap-[10px] rounded-[80px] bg-[rgba(12,12,12,0.93)]"
             />
 
             <Image
