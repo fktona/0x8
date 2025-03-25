@@ -110,13 +110,16 @@ export default function LeaderboardRow({
       </div>
 
       <div className="flex items-center gap-6">
-        <div
-          className={
-            win ? "text-green-500 text-[16px]" : "text-red-500 text-[16px]"
-          }
-        >
-          {formatNumber(data.pnlSummary.totalPnlPercentage)} %
+        <div className=" text-[16px]">
+          <span className="text-green-500">
+            {formatNumber2(data.pnlSummary.totalBuys.toString())}
+          </span>
+          /
+          <span className="text-red-500">
+            {formatNumber2(data.pnlSummary.totalSells.toString())}
+          </span>
         </div>
+
         <div
           className={
             win
@@ -124,12 +127,12 @@ export default function LeaderboardRow({
               : "text-red-500 text-[16px]"
           }
         >
-          <span className="hidden  lg:inline">
-            {formatNumber2(data.pnlSummary.totalBuys.toString())} {activeTab}
-          </span>
-
-          <span className="lg:hidden">
-            {formatNumber2(data.pnlSummary.totalBuys.toString())} {activeTab}
+          <span className="">
+            {formatNumber2(data.pnlSummary.baseTokenGain)}
+            {""}
+            <span className="ml-1">
+              {activeTab == "BASE" ? "ETH" : activeTab == "BSC" ? "BNB" : "ETH"}
+            </span>
           </span>
         </div>
 
@@ -148,11 +151,15 @@ export default function LeaderboardRow({
               stroke-linejoin="round"
             />
           </svg>
-          <span className="text-[16px] hidden lg:inline text-white/80">
-            ${formatNumber2(data.pnlSummary.totalPnlUSD)}
-          </span>
-          <span className="text-[16px] lg:hidden text-white/80">
-            ${formatNumber2(data.pnlSummary.totalPnlUSD)}
+          <span
+            className={
+              win
+                ? "text-green-500 uppercase text-[16px]"
+                : "text-red-500 text-[16px]"
+            }
+          >
+            {"("}${formatNumber2(data.pnlSummary.baseTokenGainUSD)}
+            {")"}
           </span>
         </div>
       </div>

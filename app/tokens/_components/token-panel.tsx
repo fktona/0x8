@@ -43,6 +43,8 @@ export default function TokenPanel({
     return <TokenPanelSkeleton />;
   }
 
+  console.log(data);
+
   return (
     <motion.div
       className="bg-[#1B1B1B] border border-white/10 rounded-lg mb-4 overflow-hidden"

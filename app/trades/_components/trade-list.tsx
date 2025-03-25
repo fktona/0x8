@@ -19,6 +19,7 @@ interface TradeProps {
 }
 
 export default function TradesList({ trades, isLoading }: TradeProps) {
+
   if (isLoading) {
     return (
       <div className="bg-[#111] border border-white/10 rounded-lg overflow-hidden">

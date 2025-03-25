@@ -44,7 +44,7 @@ export default function TradeComponents({}: {}) {
             <div className="w-[11px] aspect-square bg-[#11FF00] rounded-full animate-pulse" />
             RealTime Trades
           </h4>
-          <div className="flex text-[16px] font-aktiv-medium font-medium ml-4 gap-2">
+          <div className="flex text-[16px] font-aktiv-medium min-w-[300px] font-medium ml-4 gap-2">
             {["All", "BSC", "ETH", "BASE"].map((tab) => (
               <motion.button
                 key={tab}
@@ -121,8 +121,9 @@ export default function TradeComponents({}: {}) {
               : filteredUsers
                   ?.filter((trade) => {
                     if (activeTab === "All") return trade;
-                    return (
-                      trade.transactions[0].chain === activeTab.toLowerCase()
+                    return trade.transactions.some(
+                      (transaction) =>
+                        transaction.chain === activeTab.toLocaleLowerCase()
                     );
                   })
                   .map((trade, index) => (

@@ -22,47 +22,42 @@ function calculateTradeSums(
   trades: {
     totalBuys: number;
     totalSells: number;
-    totalBuyTokenAmount: string;
-    totalSellTokenAmount: string;
-    totalBuyTokenAmountUSD: string;
-    totalSellTokenAmountUSD: string;
+    totalTokenBought: string;
+    totalTokenSold: string;
+    totalTokenBoughtUSD: string;
+    totalTokenSoldUSD: string;
   }[]
 ): {
   totalBuys: number;
   totalSells: number;
-  totalBuyTokenAmount: number;
-  totalSellTokenAmount: number;
-  totalBuyTokenAmountUSD: number;
-  totalSellTokenAmountUSD: number;
+  totalTokenBought: number;
+  totalTokenSold: number;
+  totalTokenBoughtUSD: number;
+  totalTokenSoldUSD: number;
 } {
   return trades.reduce(
     (totals, trade) => {
       totals.totalBuys += trade.totalBuys;
       totals.totalSells += trade.totalSells;
-      totals.totalBuyTokenAmount += parseFloat(trade.totalBuyTokenAmount);
-      totals.totalSellTokenAmount += parseFloat(trade.totalSellTokenAmount);
-      totals.totalBuyTokenAmountUSD += parseFloat(trade.totalBuyTokenAmountUSD);
-      totals.totalSellTokenAmountUSD += parseFloat(
-        trade.totalSellTokenAmountUSD
-      );
+      totals.totalTokenBought += parseFloat(trade.totalTokenBought);
+      totals.totalTokenSold += parseFloat(trade.totalTokenSold);
+      totals.totalTokenBoughtUSD += parseFloat(trade.totalTokenBoughtUSD);
+      totals.totalTokenSoldUSD += parseFloat(trade.totalTokenSoldUSD);
       return totals;
     },
     {
       totalBuys: 0,
       totalSells: 0,
-      totalBuyTokenAmount: 0,
-      totalSellTokenAmount: 0,
-      totalBuyTokenAmountUSD: 0,
-      totalSellTokenAmountUSD: 0,
+      totalTokenBought: 0,
+      totalTokenSold: 0,
+      totalTokenBoughtUSD: 0,
+      totalTokenSoldUSD: 0,
     }
   );
 }
 
 const allAmountsUsd = (trades: ExtendedTokenTradeSummary[]) =>
-  trades.reduce(
-    (acc, trade) => acc + parseFloat(trade.totalBuyTokenAmountUSD),
-    0
-  );
+  trades.reduce((acc, trade) => acc + parseFloat(trade.totalTokenBoughtUSD), 0);
 
 export default function ProfilePage({
   trades,
@@ -78,7 +73,7 @@ export default function ProfilePage({
   );
   const [holdings, setHoldings] = useState<TokenHoldings[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState("Most Recent");
+  const [selected, setSelected] = useState("Filter");
 
   const combinedAddresses = [
     ...new Set(
@@ -180,9 +175,8 @@ export default function ProfilePage({
     const totals = calculateTradeSums(tokenPnl || []);
     return {
       totalBuysAndSells: totals,
-      netTradeAmountUSD:
-        totals.totalBuyTokenAmountUSD - totals.totalSellTokenAmountUSD,
-      netTrade: totals.totalSellTokenAmount - totals.totalBuyTokenAmount,
+      netTradeAmountUSD: totals.totalTokenBoughtUSD - totals.totalTokenSoldUSD,
+      netTrade: totals.totalTokenSold - totals.totalTokenBought,
     };
   }, [tokenPnl]);
 
@@ -487,8 +481,8 @@ export default function ProfilePage({
                   </button>
 
                   {isOpen && (
-                    <div className="absolute top-full left-0 mt-1 bg-[#222] border border-white/10 rounded shadow-lg z-10">
-                      {["Most Recent", "Daily", "Weekly"].map((option) => (
+                    <div className="absolute top-full left-0 mt-1 bg-[#222] border w-[150px] border-white/10 rounded shadow-lg z-10">
+                      {["Most Recent", "Profit", "Loss"].map((option) => (
                         <button
                           key={option}
                           className="block w-full text-left px-4 py-2 hover:bg-white/10 text-sm"
@@ -555,7 +549,13 @@ export default function ProfilePage({
                   .fill(null)
                   .map((_, index) => <TokenPanelSkeleton key={index} />)
               : tokenPnl
-                  ?.filter((o) => o.totalSells != 0)
+                  ?.filter((o) =>
+                    selected.toLowerCase() == "profit"
+                      ? parseFloat(o.realizedPnlUSD) > 0
+                      : selected.toLowerCase() == "loss"
+                      ? parseFloat(o.realizedPnlUSD) < 0
+                      : o
+                  )
                   ?.map((token, index) => (
                     <TokenPnlItem
                       key={index}

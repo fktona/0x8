@@ -385,10 +385,12 @@ export async function getUserPnl({
   wallet,
   chain,
   tokens,
+  duration,
 }: {
   wallet: string;
   chain: string;
   tokens: string[];
+  duration?: string;
 }) {
   try {
     const response = await fetch(
@@ -539,5 +541,33 @@ export const getTokenMetadata = async (address: string, chain: string) => {
   } catch (error) {
     console.error("Error fetching token metadata:", error);
     return null;
+  }
+};
+
+export const getLeaderBoardv2 = async (chain: string, period: number) => {
+  try {
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_API_URL
+      }user/pnl-leaderboard-v2?chain=${chain}&duration=${period.toString()}`,
+      {
+        method: "GET",
+        next: {
+          tags: ["admin"],
+        },
+      }
+    );
+
+    if (!response.ok) {
+      console.log(response);
+      throw new Error("Failed to fetch transactions");
+    }
+
+    const data = await response.json();
+    console.log("Transactions:", data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+    return [];
   }
 };

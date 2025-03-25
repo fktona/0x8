@@ -41,12 +41,17 @@ export interface AlTransactionsProps extends UserProfile {
 
 export type PnlSummary = {
   totalTradesCount: number;
-  totalPnlUSD: string;
+  profitableTrades: number;
+  losingTrades: number;
+  totalBaseTokenInvested: string; // Amount in base token (ETH or BNB)
+  totalBaseTokenInvestedUSD: string; // Amount in USD
+  totalBaseTokenRealized: string; // Amount in base token (ETH or BNB)
+  totalBaseTokenRealizedUSD: string; // Amount in USD
+  baseTokenGain: string; // The total amount of base token gained
+  baseTokenGainUSD: string; // The total USD value of base token gained
   totalPnlPercentage: number;
   totalBuys: number;
   totalSells: number;
-  totalBuysUSD: string;
-  totalSellsUSD: string;
 };
 
 export type LeaderBoard = {
@@ -131,7 +136,6 @@ export type TokenTradeSummary = {
   pnlPercentage: number;
 };
 
-
 export type ExtendedTokenTradeSummary = {
   tokenAddress: string;
   tokenName: string;
@@ -139,20 +143,18 @@ export type ExtendedTokenTradeSummary = {
   tradeCount: number;
   totalBuys: number;
   totalSells: number;
-  totalTokenBought: string;
-  totalTokenBoughtUSD: string;
-  totalBuyTokenAmount: string;
-  buyTokenName: string;
-  buyTokenSymbol: string;
-  totalTokenSold: string;
-  totalTokenSoldUSD: string;
-  totalSellTokenAmount: string;
-  sellTokenName: string;
-  sellTokenSymbol: string;
-  pnlUSD: string;
-  pnlPercentage: number;
-  avgBuyTimeSeconds: number;
-  avgSellTimeSeconds: number;
-  totalSellTokenAmountUSD: string;
-  totalBuyTokenAmountUSD: string;
+  totalBaseTokenSpent: string; // Amount of base token spent (ETH or BNB)
+  totalBaseTokenSpentUSD: string; // USD equivalent of base token spent
+  totalTokenBought: string; // Amount of token bought
+  totalTokenBoughtUSD: string; // USD equivalent of tokens bought
+  totalTokenSold: string; // Amount of token sold
+  totalTokenSoldUSD: string; // USD equivalent of tokens sold
+  totalBaseTokenReceived: string; // Amount of base token received
+  totalBaseTokenReceivedUSD: string; // USD equivalent of base token received
+  tokenNetAmount: string; // Net token amount after trades
+  baseTokenPnl: string; // Profit/loss in base token
+  realizedPnlUSD: string; // Profit/loss in USD
+  realizedPnlPercentage: number; // P&L percentage
+  avgBuyTimeSeconds: number; // Average buy time in seconds
+  avgSellTimeSeconds: number; // A
 };

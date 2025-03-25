@@ -1,4 +1,4 @@
-import { formatNumber, timeAgo } from "@/libs/utils";
+import { formatNumber, removeWrapped, timeAgo } from "@/libs/utils";
 import { TokenPanelProps } from "./tokens";
 import Image from "next/image";
 import Profile from "@/app/profile/[id]/page";
@@ -17,6 +17,7 @@ export default function TokenTransaction({
   blockTimestamp,
   imageUrl,
   wallet,
+  type,
 }: TokenPanelProps) {
   return (
     <div className="grid grid-cols-4  gap-2 text-xs p-2">
@@ -39,8 +40,10 @@ export default function TokenTransaction({
         {/* <span className="truncate">{name}</span> */}
       </div>
       <div className="text-white">
-        {formatNumber(tokenOutAmount)}{" "}
-        <span className="text-yellow-500">{tokenOutSymbol}</span>{" "}
+        {formatNumber(type == "buy" ? tokenOutAmount : tokenInSymbol)}{" "}
+        <span className="text-yellow-500">
+          {removeWrapped(type == "buy" ? tokenOutSymbol : tokenInSymbol)}
+        </span>{" "}
       </div>
       <div className="text-yellow-500">
         {formatNumber(tokenInAmount)}{" "}

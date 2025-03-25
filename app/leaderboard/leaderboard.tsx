@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import LeaderboardRow from "./leaderboardrow";
-import { getLeaderBoard } from "../actions/action";
+import { getLeaderBoard, getLeaderBoardv2 } from "../actions/action";
 import LeaderboardRowSkeleton from "./leader-board-sk";
 import type { LeaderBoard } from "@/types";
 import { useTransition } from "react";
@@ -12,13 +12,17 @@ export default function LeaderboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [boardData, setBoardData] = useState<LeaderBoard[]>([]);
   const [isPending, startTransition] = useTransition();
+  const [activePeriod, setActivePeriod] = useState("Daily");
 
   useEffect(() => {
     // Use startTransition to handle the async state updates
     startTransition(async () => {
       setError(null);
       try {
-        const res = await getLeaderBoard(activeTab);
+        const res = await getLeaderBoardv2(
+          activeTab,
+          activePeriod === "Daily" ? 1 : activePeriod === "Weekly" ? 7 : 30
+        );
         if (res && res.length > 0) {
           setBoardData(res);
         } else {
@@ -32,7 +36,7 @@ export default function LeaderboardPage() {
         console.log("finally");
       }
     });
-  }, [activeTab]);
+  }, [activeTab, activePeriod]);
 
   // Handle tab changes with transitions
   const handleTabChange = (tab: string) => {
@@ -45,13 +49,13 @@ export default function LeaderboardPage() {
     <div className="min-h-screen max-w-[1200px] mx-auto bg-black text-white">
       {/* Leaderboard Section */}
       <div className="p-4 ">
-        <div className="flex lg:items-center lg:gap-2 mb-4 flex-col lg:flex-row   ">
-          <div className="flex lg:items-center lg:gap-2 mb-4 flex-col lg:flex-row gap-[28px]">
+        <div className="flex lg:items-center lg:gap-2 mb-4 flex-col lg:flex-row  lg:justify-between  ">
+          <div className="flex lg:items-center  lg:gap-2 flex-col lg:flex-row gap-[28px]">
             <h4 className="flex items-center text-[20px] font-aktiv-bold font-bold justify-between gap-2">
               PNL Leaderboard
             </h4>
 
-            <div className="flex text-[16px] font-aktiv-medium font-medium lg:ml-4 gap-2">
+            <div className="flex text-[16px]  font-aktiv-medium font-medium lg:ml-4 gap-2">
               <button
                 className={`px-[9px] py-[10px] rounded-[10px] flex items-center gap-1 ${
                   activeTab === "BSC" ? "bg-white text-black" : "bg-transparent"
@@ -104,6 +108,33 @@ export default function LeaderboardPage() {
               </button>
             </div>
           </div>
+
+          <div className="flex rounded-full lg:w-auto w-fit mt-5 lg:mt-0  lg:p-1">
+            <button
+              className={`px-[20px] py-[10px]  flex items-center rounded-[12px] ${
+                activePeriod === "Daily" ? "bg-white text-black" : ""
+              }`}
+              onClick={() => setActivePeriod("Daily")}
+            >
+              Daily
+            </button>
+            <button
+              className={`px-[20px] py-[10px]  flex items-center rounded-[12px] ${
+                activePeriod === "Weekly" ? "bg-white text-black" : ""
+              }`}
+              onClick={() => setActivePeriod("Weekly")}
+            >
+              Weekly
+            </button>
+            <button
+              className={`px-[20px] py-[10px]  flex items-center rounded-[12px] ${
+                activePeriod === "Monthly" ? "bg-white text-black" : ""
+              }`}
+              onClick={() => setActivePeriod("Monthly")}
+            >
+              Monthly
+            </button>
+          </div>
         </div>
 
         {/* Leaderboard List */}
@@ -120,7 +151,7 @@ export default function LeaderboardPage() {
                   activeTab={activeTab}
                 />
               ))
-            : Array(15)
+            : Array(10)
                 .fill(null)
                 .map((_, index) =>
                   !error ? <LeaderboardRowSkeleton key={index} /> : null
