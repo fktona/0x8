@@ -149,7 +149,7 @@ function Hero() {
           variants={boxVariants}
           whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
         >
-          <Image alt="hero" src="/base.svg" width={100} height={100} />
+          <Image alt="hero" src="/base1.svg" width={100} height={100} />
         </motion.div>
         <motion.div
           className="bg-[#627EEA] row-span-1 rounded-[20px] flex items-center justify-center"
