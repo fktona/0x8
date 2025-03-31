@@ -93,7 +93,7 @@ function Hero() {
                 },
               }}
               className={cn(
-                "lg:text-[12.26px] text-[10px] font-aktiv-regular lg:rounded-full lg:mt-[80px] md:mt-[43px] mt-[27px] bg-white/[0.08] text-white/[0.56] rounded-[55px] px-[9.5px] lg:py-[5.5px] py-1 flex justify-center gap-[5px] items-center",
+                "lg:text-[12.26px] text-[10px] text-white font-aktiv-regular lg:rounded-full lg:mt-[80px] md:mt-[43px] mt-[27px] bg-white/[0.08] text-white/[0.56] rounded-[55px] px-[9.5px] lg:py-[5.5px] py-1 flex justify-center gap-[5px] items-center",
                 index === 0 && "bg-white/[0.24]"
               )}
             >
