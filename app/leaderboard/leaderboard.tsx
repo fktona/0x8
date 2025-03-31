@@ -137,7 +137,7 @@ export default function LeaderboardPage() {
         </div>
 
         {/* Leaderboard List */}
-        {error && (
+        {error && Image.length == 0 && (
           <div className="text-center text-red-500 font-bold">{error}</div>
         )}
         <div className="space-y-2 mt-[30px]">
