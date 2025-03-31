@@ -93,7 +93,7 @@ function Hero() {
                 },
               }}
               className={cn(
-                "lg:text-[12.26px] text-[10px] text-white font-aktiv-regular lg:rounded-full lg:mt-[80px] md:mt-[43px] mt-[27px] bg-white/[0.08] text-white/[0.56] rounded-[55px] px-[9.5px] lg:py-[5.5px] py-1 flex justify-center gap-[5px] items-center",
+                "lg:text-[12.26px] text-[10px] font-aktiv-regular lg:rounded-full lg:mt-[80px] md:mt-[43px] mt-[27px] bg-white/[0.08] text-white/[0.56] rounded-[55px] px-[9.5px] lg:py-[5.5px] py-1 flex justify-center gap-[5px] items-center",
                 index === 0 && "bg-white/[0.24]"
               )}
             >
@@ -101,7 +101,9 @@ function Hero() {
             </motion.li>
           ))}
         </motion.ul>
-        <motion.h1 variants={textVariants}>Track the leading</motion.h1>
+        <motion.h1 variants={textVariants} className=" text-white">
+          Track the leading
+        </motion.h1>
         <motion.h1
           variants={textVariants}
           className="text-[#FFD238] flex items-center justify-start gap-[8px]"
@@ -115,7 +117,9 @@ function Hero() {
             className="lg:w-[170px] md:h-[40px] h-[26px]"
           />
         </motion.h1>
-        <motion.h1 variants={textVariants}>traders in real time</motion.h1>
+        <motion.h1 variants={textVariants} className=" text-white">
+          traders in real time
+        </motion.h1>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
