@@ -49,13 +49,13 @@ const FaqAccordionItem: React.FC<{
 }> = ({ item, isOpen, toggleAccordion }) => {
   return (
     <div className="border border-white/20 rounded-lg mb-4 overflow-hidden">
-      <button
+      <div
         className="w-full text-left p-4 flex justify-between items-center focus:outline-none"
         onClick={toggleAccordion}
       >
         <span className="text-lg font-medium">{item.question}</span>
         <span className="text-2xl">{isOpen ? "−" : "+"}</span>
-      </button>
+      </div>
 
       {isOpen && (
         <div className="p-4 pt-0 text-gray-400">
