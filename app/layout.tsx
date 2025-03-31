@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={` ${aktive.variable} ${aktivThin.variable} ${aktiveBold.variable}  ${aktiveMedium.variable} antialiased overflow-x-hidden`}
+        className={` ${aktive.variable} ${aktivThin.variable} ${aktiveBold.variable}  ${aktiveMedium.variable} antialiased text-white overflow-x-hidden`}
       >
         <Navbar />
         <div className="lg:mt-[20px] mt-[27px]" />
